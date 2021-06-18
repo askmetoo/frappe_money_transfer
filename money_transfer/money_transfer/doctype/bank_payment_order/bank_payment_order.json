@@ -1,0 +1,139 @@
+{
+ "creation": "2021-06-18 06:29:50.520850",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "s_break_1",
+  "serial_no",
+  "currency",
+  "client_no",
+  "c_break_1",
+  "branch",
+  "amount",
+  "client_serial",
+  "s_break_2",
+  "client_name",
+  "region",
+  "c_break_2",
+  "region_code",
+  "transaction_notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Branch",
+   "options": "Bank Branch",
+   "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Currency",
+   "options": "Bank Currency",
+   "reqd": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "client_name",
+   "fieldtype": "Data",
+   "label": "Client Name",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "serial_no",
+   "fieldtype": "Data",
+   "label": "Serial No",
+   "read_only": 1
+  },
+  {
+   "fieldname": "client_no",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Client No",
+   "reqd": 1
+  },
+  {
+   "default": "001",
+   "fieldname": "client_serial",
+   "fieldtype": "Data",
+   "label": "Client Serial",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Amount",
+   "reqd": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "transaction_notes",
+   "fieldtype": "Data",
+   "label": "Transaction Notes",
+   "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "region",
+   "fieldtype": "Data",
+   "in_preview": 1,
+   "label": "Region",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "default": " _",
+   "fieldname": "region_code",
+   "fieldtype": "Data",
+   "label": "Region Code",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "s_break_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "c_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "s_break_2",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "c_break_2",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "modified": "2021-06-18 11:58:52.967392",
+ "modified_by": "Administrator",
+ "module": "Money Transfer",
+ "name": "Bank Payment Order",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

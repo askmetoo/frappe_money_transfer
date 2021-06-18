@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include money_transfer *.css
+recursive-include money_transfer *.csv
+recursive-include money_transfer *.html
+recursive-include money_transfer *.ico
+recursive-include money_transfer *.js
+recursive-include money_transfer *.json
+recursive-include money_transfer *.md
+recursive-include money_transfer *.png
+recursive-include money_transfer *.py
+recursive-include money_transfer *.svg
+recursive-include money_transfer *.txt
+recursive-exclude money_transfer *.pyc
