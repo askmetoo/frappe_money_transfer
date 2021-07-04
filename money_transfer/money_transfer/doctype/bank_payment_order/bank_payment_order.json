@@ -76,7 +76,8 @@
    "fieldname": "client_no",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Client No"
+   "label": "Client No",
+   "length": 7
   },
   {
    "fieldname": "amount",
@@ -276,7 +277,7 @@
    "options": "Personal\nCommercial"
   }
  ],
- "modified": "2021-07-05 21:19:26.887797",
+ "modified": "2021-07-06 00:24:10.005086",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Order",

@@ -48,9 +48,6 @@ def getClientInfo(client_no, client_seril, branch_name, currency, amount):
 	errorMsg = ''
 	if errorFlag:
 		errorCode = dataUtf[1:6].decode("utf-8").strip()
-		print("*" * 100)
-		print(errorCode)
-		print("*" * 100)
 		errorMsg = frappe.db.get_value('Bank System Error', errorCode, ['a_name'])
 	clientName = dataUtf[140:189].decode("iso8859_6")
 	clientRegionCode = dataUtf[200:203].decode("utf-8")
@@ -68,6 +65,7 @@ def sendVerificationDoc(our_bank, dis_bank, beneficiary_no, account_type, doc_na
 	req_path = 'Verification/REQ'
 	res_path = 'Verification/RES'
 	BillVerification_Serial = frappe.db.get_value('Bank CSSRLCOD', "VerificationFileSerial", ['table_serial'])
+	frappe.db.set_value('Bank CSSRLCOD', "VerificationFileSerial", {"table_serial" : str(int(BillVerification_Serial) + 1)})
 	date = datetime.now()
 	postfix = str(date.year) + str(date.month) + str(date.day) + '_' + BillVerification_Serial + '.xml'
 	req_file_name = 'Verification_RQ_' + postfix
