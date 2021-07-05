@@ -21,19 +21,47 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Bank Region",
-					"label": _("Region"),
+					"name": "Bank Company",
+					"label": _("Banks"),
 				},
-                	{
+				{
 					"type": "doctype",
 					"name": "Bank Branch",
-					"label": _("Branch"),
+					"label": _("Branches"),
 				},
+				{
+					"type": "doctype",
+					"name": "Bank Region",
+					"label": _("Regions"),
+				},
+                	
                 {
 					"type": "doctype",
 					"name": "Bank Currency",
-					"label": _("Currency"),
+					"label": _("Currencies"),
 				},		
+			]
+		},
+		{
+			
+			"label": _("Settings"),
+			"icon": "fa fa-wrench",
+			"items": [
+					{
+					"type": "doctype",
+					"name": "Bank Service Control",
+					"label": _("Serivce Control"),
+				},
+					{
+					"type": "doctype",
+					"name": "Bank CSSRLCOD",
+					"label": _("CSSRLCOD"),
+				},
+					{
+					"type": "doctype",
+					"name": "Bank System Error",
+					"label": _("System Errors"),
+				}
 			]
 		}
 	]

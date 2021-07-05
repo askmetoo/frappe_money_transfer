@@ -1,0 +1,172 @@
+{
+ "autoname": "field:a_name",
+ "creation": "2021-07-01 22:18:58.416747",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company_code",
+  "a_name",
+  "e_name",
+  "is_active",
+  "is_local",
+  "system_code",
+  "section_break_7",
+  "fees_flag",
+  "fees_amount",
+  "fees_percentage",
+  "min_fees",
+  "max_fees",
+  "fees_password",
+  "section_break_14",
+  "a_address",
+  "e_address",
+  "phone",
+  "fax",
+  "mobile",
+  "email",
+  "website"
+ ],
+ "fields": [
+  {
+   "fieldname": "company_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Company Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "a_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Arabic Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "e_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "English Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_local",
+   "fieldtype": "Check",
+   "label": "Is Local"
+  },
+  {
+   "fieldname": "system_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Bank Code",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "section_break_7",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "fees_flag",
+   "fieldtype": "Check",
+   "label": "Off=Amount -- On=Percentage"
+  },
+  {
+   "fieldname": "fees_amount",
+   "fieldtype": "Data",
+   "label": "Fees Amount"
+  },
+  {
+   "fieldname": "fees_percentage",
+   "fieldtype": "Data",
+   "label": "Fees Percentage"
+  },
+  {
+   "fieldname": "min_fees",
+   "fieldtype": "Data",
+   "label": "Minimum Fees"
+  },
+  {
+   "fieldname": "max_fees",
+   "fieldtype": "Data",
+   "label": "Maximum Fees"
+  },
+  {
+   "fieldname": "fees_password",
+   "fieldtype": "Data",
+   "label": "Fees Password"
+  },
+  {
+   "fieldname": "section_break_14",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "a_address",
+   "fieldtype": "Data",
+   "label": "Arabic Address"
+  },
+  {
+   "fieldname": "e_address",
+   "fieldtype": "Data",
+   "label": "English Address"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "fax",
+   "fieldtype": "Data",
+   "label": "Fax"
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "label": "Mobile"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "E-mail"
+  },
+  {
+   "fieldname": "website",
+   "fieldtype": "Data",
+   "label": "Website"
+  }
+ ],
+ "modified": "2021-07-01 23:28:03.570043",
+ "modified_by": "Administrator",
+ "module": "Money Transfer",
+ "name": "Bank Company",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

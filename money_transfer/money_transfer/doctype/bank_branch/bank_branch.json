@@ -1,14 +1,25 @@
 {
- "autoname": "field:branch_name",
+ "autoname": "format:{bank} - {a_name}",
  "creation": "2021-06-18 09:35:41.164368",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "bank",
   "branch_code",
-  "branch_name",
-  "website",
-  "system_code"
+  "a_name",
+  "e_name",
+  "is_active",
+  "ip_address",
+  "port_number",
+  "section_break_8",
+  "branch_region",
+  "a_address",
+  "e_address",
+  "phone",
+  "fax",
+  "mobile",
+  "email"
  ],
  "fields": [
   {
@@ -19,27 +30,85 @@
    "reqd": 1
   },
   {
-   "fieldname": "branch_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": " Branch Name",
-   "reqd": 1,
-   "unique": 1
-  },
-  {
-   "fieldname": "website",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Website",
+   "fieldname": "bank",
+   "fieldtype": "Link",
+   "label": "Bank",
+   "options": "Bank Company",
    "reqd": 1
   },
   {
-   "fieldname": "system_code",
+   "fieldname": "a_name",
    "fieldtype": "Data",
-   "label": "System Code"
+   "in_list_view": 1,
+   "label": "Arabic Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "e_name",
+   "fieldtype": "Data",
+   "label": "English Name"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "branch_region",
+   "fieldtype": "Link",
+   "label": "Branch Region",
+   "options": "Bank Region"
+  },
+  {
+   "fieldname": "a_address",
+   "fieldtype": "Data",
+   "label": "Arabic Address"
+  },
+  {
+   "fieldname": "e_address",
+   "fieldtype": "Data",
+   "label": "English Address"
+  },
+  {
+   "fieldname": "ip_address",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Ip Address",
+   "reqd": 1
+  },
+  {
+   "fieldname": "port_number",
+   "fieldtype": "Data",
+   "label": "Port Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "fax",
+   "fieldtype": "Data",
+   "label": "Fax"
+  },
+  {
+   "fieldname": "mobile",
+   "fieldtype": "Data",
+   "label": "Mobile"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "E-mail"
   }
  ],
- "modified": "2021-06-18 09:35:41.164368",
+ "modified": "2021-07-01 23:25:09.241805",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Branch",
@@ -58,7 +127,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

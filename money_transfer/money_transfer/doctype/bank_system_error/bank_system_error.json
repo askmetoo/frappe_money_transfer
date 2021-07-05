@@ -1,37 +1,47 @@
 {
- "autoname": "format:{region_name}",
- "creation": "2021-06-18 10:55:16.743948",
+ "autoname": "field:error_code",
+ "creation": "2021-07-05 22:15:16.729974",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "region_code",
-  "region_name"
+  "error_code",
+  "a_name",
+  "e_name",
+  "is_active"
  ],
  "fields": [
   {
-   "allow_in_quick_entry": 1,
-   "fieldname": "region_code",
+   "fieldname": "error_code",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Region Code",
+   "label": "System Error Code",
    "reqd": 1,
    "unique": 1
   },
   {
-   "allow_in_quick_entry": 1,
-   "fieldname": "region_name",
+   "fieldname": "a_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Region Name",
-   "reqd": 1,
-   "unique": 1
+   "label": "Arabic Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "e_name",
+   "fieldtype": "Data",
+   "label": "English Name"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
   }
  ],
- "modified": "2021-07-01 23:20:23.689940",
+ "modified": "2021-07-05 22:15:16.729974",
  "modified_by": "Administrator",
  "module": "Money Transfer",
- "name": "Bank Region",
+ "name": "Bank System Error",
  "owner": "Administrator",
  "permissions": [
   {

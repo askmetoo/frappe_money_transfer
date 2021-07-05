@@ -6,18 +6,42 @@
  "field_order": [
   "s_break_1",
   "serial_no",
+  "sender_bank",
   "currency",
+  "payment_method",
   "client_no",
   "c_break_1",
+  "transaction_state_sequence",
   "branch",
   "amount",
-  "client_serial",
+  "receiver_bank",
+  "account_sequence",
   "s_break_2",
   "client_name",
   "region",
+  "sender_bank_fee",
   "c_break_2",
   "region_code",
-  "transaction_notes"
+  "swift_fee",
+  "receiver_bank_fee",
+  "s_break_3",
+  "transaction_notes",
+  "s_break_4",
+  "transaction_status",
+  "date",
+  "beneficiary_no",
+  "c_break_3",
+  "account_type",
+  "time",
+  "type",
+  "s_break_5",
+  "beneficiary_name",
+  "payment_status",
+  "our_verification_id",
+  "c_break_4",
+  "zone",
+  "reason",
+  "fp_verificaion_id"
  ],
  "fields": [
   {
@@ -25,24 +49,21 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Branch",
-   "options": "Bank Branch",
-   "reqd": 1
+   "options": "Bank Branch"
   },
   {
    "fieldname": "currency",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Currency",
-   "options": "Bank Currency",
-   "reqd": 1
+   "options": "Bank Currency"
   },
   {
    "default": "_",
    "fieldname": "client_name",
    "fieldtype": "Data",
    "label": "Client Name",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "default": "_",
@@ -55,28 +76,20 @@
    "fieldname": "client_no",
    "fieldtype": "Int",
    "in_list_view": 1,
-   "label": "Client No",
-   "reqd": 1
-  },
-  {
-   "default": "001",
-   "fieldname": "client_serial",
-   "fieldtype": "Data",
-   "label": "Client Serial",
-   "read_only": 1
+   "label": "Client No"
   },
   {
    "fieldname": "amount",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Amount",
-   "reqd": 1
+   "precision": "2"
   },
   {
    "default": "_",
    "fieldname": "transaction_notes",
-   "fieldtype": "Data",
-   "label": "Transaction Notes",
+   "fieldtype": "Long Text",
+   "label": "Transaction/Verification Notes",
    "read_only": 1
   },
   {
@@ -85,16 +98,14 @@
    "fieldtype": "Data",
    "in_preview": 1,
    "label": "Region",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "default": " _",
    "fieldname": "region_code",
    "fieldtype": "Data",
    "label": "Region Code",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "s_break_1",
@@ -111,9 +122,161 @@
   {
    "fieldname": "c_break_2",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "_",
+   "fieldname": "transaction_state_sequence",
+   "fieldtype": "Data",
+   "label": "Transaction State Sequence",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sender_bank",
+   "fieldtype": "Link",
+   "label": "Sender Bank",
+   "options": "Bank Company"
+  },
+  {
+   "fieldname": "s_break_3",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "receiver_bank",
+   "fieldtype": "Link",
+   "label": "Receiver Bank",
+   "options": "Bank Company"
+  },
+  {
+   "fieldname": "payment_method",
+   "fieldtype": "Select",
+   "label": "Payment Method",
+   "options": "\u0639\u0645\u064a\u0644 - C\n\u0635\u0646\u062f\u0648\u0642 - C\n\u0639\u0645\u064a\u0644 - CLIENT\n\u0635\u0646\u062f\u0648\u0642 - CASH"
+  },
+  {
+   "default": "001",
+   "fieldname": "account_sequence",
+   "fieldtype": "Data",
+   "label": "Account Sequence",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "sender_bank_fee",
+   "fieldtype": "Data",
+   "label": "Sender Bank Fee",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "swift_fee",
+   "fieldtype": "Data",
+   "label": "SWIFT Fee"
+  },
+  {
+   "default": "0",
+   "fieldname": "receiver_bank_fee",
+   "fieldtype": "Data",
+   "label": "Receiver Bank Fee",
+   "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "transaction_status",
+   "fieldtype": "Data",
+   "label": "Transaction/Verification Status",
+   "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "date",
+   "fieldtype": "Data",
+   "label": "Date",
+   "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "time",
+   "fieldtype": "Data",
+   "label": "Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "beneficiary_no",
+   "fieldtype": "Data",
+   "label": "Beneficiary No"
+  },
+  {
+   "fieldname": "account_type",
+   "fieldtype": "Link",
+   "label": "Account Type",
+   "options": "Bank Account Type"
+  },
+  {
+   "fieldname": "s_break_4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "c_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "s_break_5",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "_",
+   "fieldname": "beneficiary_name",
+   "fieldtype": "Data",
+   "label": "Beneficiary Name",
+   "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "payment_status",
+   "fieldtype": "Data",
+   "label": "Payment Status",
+   "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "our_verification_id",
+   "fieldtype": "Data",
+   "label": "Our Verification ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "c_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "_",
+   "fieldname": "zone",
+   "fieldtype": "Data",
+   "label": "Zone",
+   "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "reason",
+   "fieldtype": "Data",
+   "label": "Reason",
+   "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "fp_verificaion_id",
+   "fieldtype": "Data",
+   "label": "FP Verificaion ID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "Personal\nCommercial"
   }
  ],
- "modified": "2021-06-18 11:58:52.967392",
+ "modified": "2021-07-05 21:19:26.887797",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Order",
@@ -132,7 +295,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1
