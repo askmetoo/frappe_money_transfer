@@ -99,7 +99,6 @@ function verification_on_click(frm){
 				frm.set_value('our_verification_id', r.message.our_verf_id)
 				frm.set_value('zone', r.message.pv_Nm.substring(r.message.pv_Nm.length - 2))
 				frm.remove_custom_button('Verification');
-				frm.set_value('transaction_state_sequence', 'UnPost')
 				
 			}else{
 				frm.set_value('payment_status', r.message.pv_Vrfctn)
@@ -119,6 +118,8 @@ function verification_on_click(frm){
 				frm.set_value('transaction_state_sequence', 'Idle')
 				frm.set_value('transaction_status', 'false')
 				frm.set_value('transaction_notes', r.message.error_msg)
+			}else{
+				frm.set_value('transaction_state_sequence', 'UnPost')
 			}
 			frm.save()
 		}
