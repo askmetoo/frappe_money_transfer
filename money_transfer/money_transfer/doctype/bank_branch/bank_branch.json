@@ -58,7 +58,8 @@
    "fieldname": "branch_region",
    "fieldtype": "Link",
    "label": "Branch Region",
-   "options": "Bank Region"
+   "options": "Bank Region",
+   "reqd": 1
   },
   {
    "fieldname": "a_address",
@@ -108,7 +109,7 @@
    "label": "E-mail"
   }
  ],
- "modified": "2021-07-01 23:25:09.241805",
+ "modified": "2021-07-15 17:42:26.877139",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Branch",

@@ -1,12 +1,16 @@
 {
- "autoname": "format:{region_name}",
+ "autoname": "format:{a_name}",
  "creation": "2021-06-18 10:55:16.743948",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
   "region_code",
-  "region_name"
+  "a_name",
+  "e_name",
+  "is_active",
+  "service_code",
+  "unique_code"
  ],
  "fields": [
   {
@@ -20,15 +24,37 @@
   },
   {
    "allow_in_quick_entry": 1,
-   "fieldname": "region_name",
+   "fieldname": "a_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Region Name",
+   "label": "Arabic Name",
    "reqd": 1,
    "unique": 1
+  },
+  {
+   "fieldname": "e_name",
+   "fieldtype": "Data",
+   "label": "English Name"
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "service_code",
+   "fieldtype": "Data",
+   "label": "Service Code"
+  },
+  {
+   "fieldname": "unique_code",
+   "fieldtype": "Data",
+   "label": "Unique Code",
+   "reqd": 1
   }
  ],
- "modified": "2021-07-01 23:20:23.689940",
+ "modified": "2021-07-15 17:49:36.835299",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Region",
