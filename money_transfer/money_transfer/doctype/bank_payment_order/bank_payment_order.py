@@ -277,7 +277,6 @@ def get_table_serial_key(table_name):
 
 def save_file_db(site_name, file_name, file_path, private_path, relative_path, doc_name):
 	doc = 'Bank Payment Order'
-	site_name = get_site_name(frappe.local.request.host)
 	file = frappe.get_doc({
 		"doctype":"File", 'file_url':  None, 'file_name': file_name,
 		'is_private':1, 'attached_to_name':doc_name, "attached_to_doctype":doc  })
