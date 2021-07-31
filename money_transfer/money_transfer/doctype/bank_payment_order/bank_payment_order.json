@@ -10,12 +10,14 @@
   "sender_bank",
   "currency",
   "payment_method",
+  "card_type",
   "client_no",
   "c_break_1",
   "transaction_state_sequence",
   "branch",
   "amount",
   "receiver_bank",
+  "card_no",
   "account_sequence",
   "s_break_2",
   "client_name",
@@ -23,8 +25,8 @@
   "sender_bank_fee",
   "c_break_2",
   "region_code",
-  "swift_fee",
   "receiver_bank_fee",
+  "swift_fee",
   "s_break_3",
   "transaction_notes",
   "s_break_4",
@@ -37,12 +39,14 @@
   "type",
   "s_break_5",
   "beneficiary_name",
-  "payment_status",
+  "verification_status",
   "our_verification_id",
   "c_break_4",
   "zone",
   "reason",
-  "fp_verification_id"
+  "fp_verification_id",
+  "s_break_6",
+  "payment_status"
  ],
  "fields": [
   {
@@ -160,7 +164,7 @@
    "default": "001",
    "fieldname": "account_sequence",
    "fieldtype": "Data",
-   "label": "Account Sequence",
+   "label": "Client Serial",
    "read_only": 1
   },
   {
@@ -187,7 +191,7 @@
    "default": "_",
    "fieldname": "transaction_status",
    "fieldtype": "Data",
-   "label": "Transaction/Verification Status",
+   "label": "Transaction Status",
    "read_only": 1
   },
   {
@@ -278,9 +282,33 @@
    "fieldtype": "Data",
    "label": "FP Verification ID",
    "read_only": 1
+  },
+  {
+   "default": "_",
+   "fieldname": "verification_status",
+   "fieldtype": "Data",
+   "label": "Verification Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "s_break_6",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "card_type",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Card Type",
+   "options": "Bank Card Type"
+  },
+  {
+   "fieldname": "card_no",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Card No"
   }
  ],
- "modified": "2021-07-18 05:22:32.112650",
+ "modified": "2021-07-31 06:26:07.613978",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Order",

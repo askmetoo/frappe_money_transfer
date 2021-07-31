@@ -63,6 +63,23 @@ def get_data():
 					"label": _("System Errors"),
 				}
 			]
+		},
+		{
+			
+			"label": _("Transaction Types"),
+			"icon": "fa fa-wrench",
+			"items": [
+					{
+					"type": "doctype",
+					"name": "Bank Account Type",
+					"label": _("Account Type"),
+				},
+					{
+					"type": "doctype",
+					"name": "Bank Card Type",
+					"label": _("Card Type"),
+				}
+			]
 		}
 	]
 	return data

@@ -1,0 +1,63 @@
+{
+ "autoname": "format:{a_name} - {system_code}",
+ "creation": "2021-07-31 04:22:07.866496",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "a_name",
+  "e_name",
+  "system_code",
+  "is_active"
+ ],
+ "fields": [
+  {
+   "fieldname": "a_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Arabic Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "e_name",
+   "fieldtype": "Data",
+   "label": "English Name"
+  },
+  {
+   "fieldname": "system_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "System Code",
+   "reqd": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "label": "Is Active"
+  }
+ ],
+ "modified": "2021-07-31 07:42:47.959542",
+ "modified_by": "Administrator",
+ "module": "Money Transfer",
+ "name": "Bank Card Type",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
