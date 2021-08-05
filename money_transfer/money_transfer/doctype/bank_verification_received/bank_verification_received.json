@@ -1,0 +1,123 @@
+{
+ "creation": "2021-08-02 17:03:20.263224",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "req_bank_id",
+  "req_bank_vrfctn_id",
+  "req_bank_acct_id",
+  "req_bank_prtry_id",
+  "req_bank_biz_msg_idr",
+  "req_bank_msg_def_idr",
+  "req_bank_cre_dt",
+  "res_bank_id",
+  "res_bank_biz_msg_idr",
+  "res_bank_msg_def_idr",
+  "res_bank_cre_dt",
+  "res_bank_rpt_vrfctn",
+  "res_bank_rpt_prtry",
+  "customer_error",
+  "error_flg"
+ ],
+ "fields": [
+  {
+   "fieldname": "req_bank_id",
+   "fieldtype": "Data",
+   "label": "Request Bank ID"
+  },
+  {
+   "fieldname": "req_bank_vrfctn_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Verification ID"
+  },
+  {
+   "fieldname": "req_bank_acct_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Acct ID"
+  },
+  {
+   "fieldname": "req_bank_prtry_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Prtry ID"
+  },
+  {
+   "fieldname": "req_bank_biz_msg_idr",
+   "fieldtype": "Data",
+   "label": "Request Bank Biz Msg Idr"
+  },
+  {
+   "fieldname": "req_bank_msg_def_idr",
+   "fieldtype": "Data",
+   "label": "Request Bank Msg Def Idr"
+  },
+  {
+   "fieldname": "req_bank_cre_dt",
+   "fieldtype": "Data",
+   "label": "Request Bank Creation Date"
+  },
+  {
+   "fieldname": "res_bank_id",
+   "fieldtype": "Data",
+   "label": "Response Bank ID"
+  },
+  {
+   "fieldname": "res_bank_biz_msg_idr",
+   "fieldtype": "Data",
+   "label": "Response Bank Biz Msg Idr"
+  },
+  {
+   "fieldname": "res_bank_msg_def_idr",
+   "fieldtype": "Data",
+   "label": "Response Bank Msg Def Idr"
+  },
+  {
+   "fieldname": "res_bank_cre_dt",
+   "fieldtype": "Data",
+   "label": "Response Bank Creation Date"
+  },
+  {
+   "fieldname": "res_bank_rpt_vrfctn",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Response Bank Rpt Vrfctn"
+  },
+  {
+   "fieldname": "res_bank_rpt_prtry",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Response Bank Rpt Prtry"
+  },
+  {
+   "fieldname": "customer_error",
+   "fieldtype": "Data",
+   "label": "Customer Error"
+  },
+  {
+   "default": "0",
+   "fieldname": "error_flg",
+   "fieldtype": "Check",
+   "label": "Error Flag"
+  }
+ ],
+ "modified": "2021-08-03 21:31:18.596537",
+ "modified_by": "Administrator",
+ "module": "Money Transfer",
+ "name": "Bank Verification Received",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

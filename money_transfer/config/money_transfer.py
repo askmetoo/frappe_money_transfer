@@ -80,6 +80,23 @@ def get_data():
 					"label": _("Card Type"),
 				}
 			]
+		},
+		{
+			
+			"label": _("YIB Info Service"),
+			"icon": "fa fa-wrench",
+			"items": [
+					{
+					"type": "doctype",
+					"name": "Bank Verification Received",
+					"label": _("Received Verification Requests"),
+				},
+				{
+					"type": "doctype",
+					"name": "Bank Payment Received",
+					"label": _("Received Payment Requests"),
+				}
+			]
 		}
 	]
 	return data

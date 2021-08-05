@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <UserId>{user_id}</UserId>
+  <UserPass>{user_pass}</UserPass>
+  <AMOUNT>{amount}</AMOUNT>
+  <DEST_BANK>{dest_bank}</DEST_BANK>
+  <FROM_ZONE>{from_zone}</FROM_ZONE>
+  <TO_ZONE>{to_zone}</TO_ZONE>
+  <CURRENCY>{currency}</CURRENCY>
+  <TransactionID>{trans_id}</TransactionID>
+</root>

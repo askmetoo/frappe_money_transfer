@@ -8,7 +8,10 @@
   "currency_code",
   "currency_name",
   "currency_value",
-  "system_code"
+  "system_code",
+  "system_url",
+  "fetch_fees",
+  "currency_prefix"
  ],
  "fields": [
   {
@@ -39,9 +42,26 @@
    "in_list_view": 1,
    "label": "System Code",
    "reqd": 1
+  },
+  {
+   "fieldname": "system_url",
+   "fieldtype": "Data",
+   "label": "System Url",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "fetch_fees",
+   "fieldtype": "Check",
+   "label": "Fetch Fees"
+  },
+  {
+   "fieldname": "currency_prefix",
+   "fieldtype": "Data",
+   "label": "Currency Prefix"
   }
  ],
- "modified": "2021-06-18 07:14:12.669587",
+ "modified": "2021-08-06 02:37:37.690098",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Currency",
@@ -60,7 +80,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

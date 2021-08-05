@@ -197,6 +197,10 @@ function verification_call(client_no, frm){
 			}else{
 				frm.set_value('verification_status', r.message.pv_Vrfctn)
 				frm.set_value('reason', r.message.pv_Rsn)
+				frm.set_value('transaction_notes', r.message.errordesc)
+				frm.set_value('transaction_state_sequence', 'Cancel')
+				frm.save()
+				return;
 			}
 			if(r.message.result == 'Success'){
 				frm.set_value('transaction_status', r.message.result)
@@ -207,6 +211,9 @@ function verification_call(client_no, frm){
 			}else{
 				frm.set_value('transaction_status', r.message.result)
 				frm.set_value('transaction_notes', r.message.errordesc)
+				frm.set_value('transaction_state_sequence', 'Cancel')
+				frm.save()
+				return;
 			}
 			if(r.message.error_msg != ''){
 				frm.set_value('transaction_state_sequence', 'Idle')
@@ -336,7 +343,10 @@ function push_payment_on_click(frm){
 				frm.set_value('transaction_notes', r.message.journal_msg)
 				frm.set_value('transaction_state_sequence', 'Cancel')
 			}else{
-				frm.set_value('transaction_state_sequence', 'Post')
+				if(r.message.res_status == 'ACSC')
+					frm.set_value('transaction_state_sequence', 'Post')
+				else
+					frm.set_value('transaction_state_sequence', 'Cancel')
 			}
 			frm.save()
 		}

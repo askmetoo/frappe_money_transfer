@@ -1,0 +1,270 @@
+{
+ "creation": "2021-08-03 19:20:50.673539",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "req_bank_id",
+  "req_bank_biz_msg_idr",
+  "req_bank_msg_def_idr",
+  "req_bank_cre_dt",
+  "req_bank_cre_dt_tm",
+  "req_bank_accptnc_dt_tm",
+  "req_bank_sttlm_mtd",
+  "req_bank_lcl_instrm",
+  "req_bank_tx_id",
+  "req_bank_intr_bk_sttlm_amt",
+  "req_bank_chrg_br",
+  "req_bank_dbtr",
+  "req_bank_pstl_adr",
+  "req_bank_ctct_dtls",
+  "req_bank_acct_id",
+  "req_bank_prtry_id",
+  "req_bank_dbtr_acct_issr",
+  "req_bank_bldg_nb",
+  "req_bank_dbtr_agt_issr",
+  "req_bank_brnch_id",
+  "req_bank_cdtr_nm",
+  "req_bank_ustrd",
+  "res_bank_id",
+  "res_bank_biz_msg_idr",
+  "res_bank_msg_def_idr",
+  "res_bank_cre_dt",
+  "res_bank_tx_sts",
+  "time_exceed_flg",
+  "status_recieved_flg",
+  "psh_sts_rcv_flg",
+  "psh_sts_rcv_txt",
+  "req_bank_debit_id",
+  "req_bank_debit_prt",
+  "retail_fees",
+  "switch_fees",
+  "interchange_fees",
+  "transaction_id_fees",
+  "result_fees",
+  "error_desc_fees",
+  "sts_rcv_err_desc"
+ ],
+ "fields": [
+  {
+   "fieldname": "req_bank_id",
+   "fieldtype": "Data",
+   "label": "Request Bank ID"
+  },
+  {
+   "fieldname": "req_bank_biz_msg_idr",
+   "fieldtype": "Data",
+   "label": "Request Bank Biz Msg Idr"
+  },
+  {
+   "fieldname": "req_bank_msg_def_idr",
+   "fieldtype": "Data",
+   "label": "Request Bank Msg Def Idr"
+  },
+  {
+   "fieldname": "req_bank_cre_dt",
+   "fieldtype": "Data",
+   "label": "Request Bank Creation Date"
+  },
+  {
+   "fieldname": "req_bank_cre_dt_tm",
+   "fieldtype": "Data",
+   "label": "Request Bank Creation Date Time"
+  },
+  {
+   "fieldname": "req_bank_accptnc_dt_tm",
+   "fieldtype": "Data",
+   "label": "Request Bank Acceptance Date Time"
+  },
+  {
+   "fieldname": "req_bank_sttlm_mtd",
+   "fieldtype": "Data",
+   "label": "Request Bank Sttlm Mtd"
+  },
+  {
+   "fieldname": "req_bank_lcl_instrm",
+   "fieldtype": "Data",
+   "label": "Request Bank Lcl Instrm"
+  },
+  {
+   "fieldname": "req_bank_tx_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Tx Id"
+  },
+  {
+   "fieldname": "req_bank_intr_bk_sttlm_amt",
+   "fieldtype": "Data",
+   "label": "Request Bank Intr Bk Sttlm Amt"
+  },
+  {
+   "fieldname": "req_bank_chrg_br",
+   "fieldtype": "Data",
+   "label": "Request Bank Chrg Br"
+  },
+  {
+   "fieldname": "req_bank_dbtr",
+   "fieldtype": "Data",
+   "label": "Request Bank Dbtr"
+  },
+  {
+   "fieldname": "req_bank_pstl_adr",
+   "fieldtype": "Data",
+   "label": "Request Bank Pstl Adr"
+  },
+  {
+   "fieldname": "req_bank_ctct_dtls",
+   "fieldtype": "Data",
+   "label": "Request Bank Ctc Dtls"
+  },
+  {
+   "fieldname": "req_bank_acct_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Acct ID"
+  },
+  {
+   "fieldname": "req_bank_prtry_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Prtry ID"
+  },
+  {
+   "fieldname": "req_bank_dbtr_acct_issr",
+   "fieldtype": "Data",
+   "label": "Request Bank Dbtr Acct Issr"
+  },
+  {
+   "fieldname": "req_bank_bldg_nb",
+   "fieldtype": "Data",
+   "label": "Request Bank Bldg Nb"
+  },
+  {
+   "fieldname": "req_bank_dbtr_agt_issr",
+   "fieldtype": "Data",
+   "label": "Request Bank Dbtr Agt Issr"
+  },
+  {
+   "fieldname": "req_bank_brnch_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Brnch ID"
+  },
+  {
+   "fieldname": "req_bank_cdtr_nm",
+   "fieldtype": "Data",
+   "label": "Request Bank Cdtr NM"
+  },
+  {
+   "fieldname": "req_bank_ustrd",
+   "fieldtype": "Data",
+   "label": "Request Bank Ustrd"
+  },
+  {
+   "fieldname": "res_bank_id",
+   "fieldtype": "Data",
+   "label": "Response Bank ID"
+  },
+  {
+   "fieldname": "res_bank_biz_msg_idr",
+   "fieldtype": "Data",
+   "label": "Response Bank Biz Msg Idr"
+  },
+  {
+   "fieldname": "res_bank_msg_def_idr",
+   "fieldtype": "Data",
+   "label": "Response Bank Msg Def Idr"
+  },
+  {
+   "fieldname": "res_bank_cre_dt",
+   "fieldtype": "Data",
+   "label": "Response Bank Creation Date"
+  },
+  {
+   "fieldname": "res_bank_tx_sts",
+   "fieldtype": "Data",
+   "label": "Response Bank Tx Sts"
+  },
+  {
+   "fieldname": "time_exceed_flg",
+   "fieldtype": "Data",
+   "label": "Timer Exceed Flag"
+  },
+  {
+   "fieldname": "status_recieved_flg",
+   "fieldtype": "Data",
+   "label": "Status Received Flag"
+  },
+  {
+   "fieldname": "psh_sts_rcv_flg",
+   "fieldtype": "Data",
+   "label": "Push Status Received Flag"
+  },
+  {
+   "fieldname": "psh_sts_rcv_txt",
+   "fieldtype": "Data",
+   "label": "Push Status Received Text"
+  },
+  {
+   "fieldname": "req_bank_debit_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Debit ID"
+  },
+  {
+   "fieldname": "req_bank_debit_prt",
+   "fieldtype": "Data",
+   "label": "Request Bank Debit Prt"
+  },
+  {
+   "fieldname": "retail_fees",
+   "fieldtype": "Data",
+   "label": "Retail Fees"
+  },
+  {
+   "fieldname": "switch_fees",
+   "fieldtype": "Data",
+   "label": "Switch Fees"
+  },
+  {
+   "fieldname": "interchange_fees",
+   "fieldtype": "Data",
+   "label": "Interchange Fees"
+  },
+  {
+   "fieldname": "transaction_id_fees",
+   "fieldtype": "Data",
+   "label": "Transaction Id Fees"
+  },
+  {
+   "fieldname": "result_fees",
+   "fieldtype": "Data",
+   "label": "Result Fees"
+  },
+  {
+   "fieldname": "error_desc_fees",
+   "fieldtype": "Data",
+   "label": "Error Desc Fees"
+  },
+  {
+   "fieldname": "sts_rcv_err_desc",
+   "fieldtype": "Data",
+   "label": "Status Received Error Desc"
+  }
+ ],
+ "modified": "2021-08-03 19:30:51.352573",
+ "modified_by": "Administrator",
+ "module": "Money Transfer",
+ "name": "Bank Payment Received",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
