@@ -156,13 +156,19 @@ function update_date_time(frm){
 }
 
 function verification_on_click(frm){
+	var missed_fields = show_missed_fields(frm, ['beneficiary_no','account_type', 'receiver_bank', 'amount', 'branch', 'sender_bank', 'currency'])
+	if(missed_fields) return;
 	var payment_method = get_payment_type(frm.doc.payment_method);
 	var client_no = ''
 	if(payment_method == 1 || payment_method == 2){
+		var missed_fields = show_missed_fields(frm, ['client_no'])
+		if(missed_fields) return;
 		client_no = frm.doc.client_no;
 		verification_call(client_no, frm);
 	}
 	else{
+		var missed_fields = show_missed_fields(frm, ['card_type', 'card_no'])
+		if(missed_fields) return;
 		frm.save().then(()=>{
 			frm.set_value('serial_no', frm.doc.name);
 			verification_call(client_no, frm);
@@ -263,9 +269,11 @@ function get_client_info_on_click(frm){
 }
 
 function cancel_on_click(frm){
+	var payment_method = get_payment_type(frm.doc.payment_method);
 	frappe.call({
 		"method": "money_transfer.money_transfer.doctype.bank_payment_order.bank_payment_order.cancel_reservation",
 		"args": {
+			'payment_method': payment_method,
 			'client_no': frm.doc.client_no, 
 			'client_seril': frm.doc.account_sequence, 
 			'user_branch': frm.doc.branch, 

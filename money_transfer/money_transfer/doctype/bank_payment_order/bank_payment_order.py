@@ -211,11 +211,13 @@ def push_transfer_fees(site_name, public_path, private_path, req_path, res_path,
 	
 
 @frappe.whitelist()
-def cancel_reservation(client_no, client_seril, currency, user_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id):
-	error_msg, cancellation_status = do_cancel_reservation(client_no, client_seril, currency, user_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
+def cancel_reservation(payment_method, client_no, client_seril, currency, user_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id):
+	error_msg, cancellation_status = do_cancel_reservation(payment_method, client_no, client_seril, currency, user_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
 	return {'error_msg': error_msg, 'cancellation_status': cancellation_status}
 
-def do_cancel_reservation(client_no, client_seril, currency, user_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id):
+def do_cancel_reservation(payment_method, client_no, client_seril, currency, user_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id):
+	if int(payment_method) == 3 or int(payment_method):
+		return  '', 'true'
 	msg = ''
 	branch_code, branch_ip, branch_port = frappe.db.get_value('Bank Branch',user_branch, ['branch_code', 'ip_address', 'port_number'])
 	currency_code = frappe.db.get_value('Bank Currency',currency, ['system_code'])
@@ -271,7 +273,8 @@ dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, be
 	req_xml_path = site_name + public_path + req_file_name
 	res_xml_path = site_name + public_path + res_file_name
 	mkdir([site_name + private_path + req_path , site_name + private_path + res_path ])
-
+	currency_prefix =frappe.db.get_value('Bank Currency', currency, ['currency_prefix'])
+	currency_prefix = currency_prefix if currency_prefix else ''
 	xml_body = create_pp_xml_doc(req_xml_path, payment_method, client_no, client_serial, our_client_name, our_client_address, our_bank, our_branch, region_code, dest_bank, fp_verification_id, amount, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no, card_type)
 	xml_body = xml_body.encode('utf-8')
 	results = {"cancellation_msg": '', "cancellation_status": 'false', "journal_msg": '', "journal_status": 'false', 'res_status': 'false'}
@@ -290,7 +293,7 @@ dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, be
 		is_push_payment = False
 		res_xml, status_error = push_status(doc_name, our_bank, fp_verification_id)
 		if status_error != '':
-			results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
+			results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(payment_method, client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
 			return results
 	except requests.exceptions.ConnectionError:
 		is_push_payment = False
@@ -304,11 +307,11 @@ dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, be
 		save_file_db(site_name, res_file_name, res_xml_path, private_path, res_path, doc_name)
 
 	if res_status == 'ACSC':
-		results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
+		results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(payment_method, client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
 		if results['cancellation_msg'] == '':
-			results['journal_msg'], results['journal_status'] = do_journal(payment_method, client_no, client_serial, our_branch, dest_bank, beneficiary_no, amount, currency, rcv_fee, swift_fee, snd_fee, fp_verification_id)
+			results['journal_msg'], results['journal_status'] = do_journal(payment_method, client_no, client_serial, our_branch, dest_bank, currency_prefix+beneficiary_no, amount, currency, rcv_fee, swift_fee, snd_fee, fp_verification_id)
 	else: 
-		results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
+		results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(payment_method, client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
 	return results
 
 
