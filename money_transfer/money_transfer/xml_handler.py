@@ -96,9 +96,9 @@ def create_fees_xml_doc(save_path_file, req_bank_id, fees_password, amount, dest
 
 # Push payment xml document
 def create_pp_xml_doc(save_path_file, payment_method, client_no, client_serial, our_client_name, our_client_address, our_bank, our_branch, region_code,
-dest_bank, fp_verification_id, amount, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no='', card_type=''):
+dest_bank, fp_verification_id, amount, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no='', card_type='', sender_name='', sender_region=''):
   (our_bank_id, dest_bank_id, our_branch_code, our_branch_name, fp_region_code, currency_code, 
-  currency_system_code, fp_header_name, pacs_req, acc_type, payment_serial, username, currency_prefix) = get_payment_data(our_bank, dest_bank, our_branch, region_code, currency, account_type)
+  currency_system_code, fp_header_name, pacs_req, acc_type, payment_serial, username, currency_prefix, sender_address, sender_region_code) = get_payment_data(our_bank, dest_bank, our_branch, region_code, currency, account_type, sender_region)
   cre_dt_serial = datetime.today().strftime('%Y%m%d%H%M%S')
   cre_dt = datetime.today().strftime('%Y-%m-%dT%H:%M:%S.%f')[:23] + 'Z'
   cre_dt_tm = datetime.today().strftime('%Y-%m-%dT%H:%M:%S.%f')[:23] + "+03:00"
@@ -108,7 +108,10 @@ dest_bank, fp_verification_id, amount, currency, beneficiary_name, beneficiary_n
     cli_id_no = '#'
     cli_id_type = '#'
   else:
-    cli_name = our_client_name
+    cli_name = sender_name
+    our_client_name = sender_name
+    our_client_address = sender_address
+    fp_region_code = sender_region_code
     cli_id_no = card_no
     cli_id_type = card_type
     client_no = '00001'

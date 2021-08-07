@@ -1,5 +1,6 @@
 import socket
 from frappe import _
+from money_transfer.money_transfer.utils import console_print
 
 def make_socket_connection(ip, port, msg):
   error_msg = ''

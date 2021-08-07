@@ -48,7 +48,7 @@ def get_fees_data(user_bank, dest_bank, user_branch, currency):
 	return req_bank_id, fees_password, dest_bank_id, unique_code, currency_code
 	
 
-def get_payment_data(our_bank, dest_bank, our_branch, region_code, currency, account_type):
+def get_payment_data(our_bank, dest_bank, our_branch, region_code, currency, account_type, sender_region):
 	our_bank_id = frappe.db.get_value('Bank Company', our_bank, ['system_code'])
 	dest_bank_id = frappe.db.get_value('Bank Company', dest_bank, ['system_code'])
 	our_branch_code, our_branch_name = frappe.db.get_value('Bank Branch', our_branch, ['branch_code', 'a_name'])
@@ -62,9 +62,12 @@ def get_payment_data(our_bank, dest_bank, our_branch, region_code, currency, acc
 	acc_type = frappe.db.get_value('Bank Account Type', account_type, ['system_code'])
 	payment_serial = get_table_serial_key('PaymentSerial')
 	username = frappe.db.get_value('User', frappe.session.user, ['username'])
-
+	if sender_region != '':
+		sender_address, sender_region_code = frappe.db.get_value('Bank Region', sender_region, ["a_name","service_code"])
+	else:
+		sender_address, sender_region_code = '',''
 	return (our_bank_id, dest_bank_id, our_branch_code, our_branch_name, fp_region_code, currency_code, 
-	currency_system_code, fp_header_name, pacs_req, acc_type, payment_serial, username, currency_prefix)
+	currency_system_code, fp_header_name, pacs_req, acc_type, payment_serial, username, currency_prefix, sender_address, sender_region_code)
 
 def get_status_data(our_bank):
 	req_bank = frappe.db.get_value('Bank Company', our_bank, ['system_code'])

@@ -78,7 +78,7 @@ def check_client(client_no, client_seril, branch_name, currency, amount=0, rcv_f
 	return result
 
 @frappe.whitelist()
-def verification(client_no, client_seril, our_bank, user_branch, dest_bank, beneficiary_no, account_type, doc_name, amount, currency):
+def verification(client_no, client_seril, our_bank, user_branch, dest_bank, beneficiary_no, account_type, doc_name, amount, currency, payment_method):
 	site_name = get_current_site_name()
 	date = datetime.now()
 	public_path = '/public/files/' 
@@ -145,11 +145,11 @@ def verification(client_no, client_seril, our_bank, user_branch, dest_bank, bene
 	error_msg, client_name, client_address, client_region_code = '', '', '', ''
 
 	if result == 'Success':
-		res = check_client(client_no, client_seril, user_branch, currency, amount, rcv_fee= interchange, swift_fee=switch, snd_fee=retail, beneficiary_name=pty_nm, fp_verification_id=fp_vrfctn)
-		error_msg = res['error_msg']
-		if res['res_status'] == 'true':
-			client_name, client_address, client_region_code = res["client_name"], res['client_region'], res["client_region_code"]
-
+		if int(payment_method) == 1 or int(payment_method) == 2:
+			res = check_client(client_no, client_seril, user_branch, currency, amount, rcv_fee= interchange, swift_fee=switch, snd_fee=retail, beneficiary_name=pty_nm, fp_verification_id=fp_vrfctn)
+			error_msg = res['error_msg']
+			if res['res_status'] == 'true':
+				client_name, client_address, client_region_code = res["client_name"], res['client_region'], res["client_region_code"]
 	results = {
 		'error_msg':error_msg,'pv_Vrfctn': rpt_vrfctn, 'pv_Rsn' : rpt_rsn, 'pv_Nm': pty_nm, 'pv_FPVrfctn':fp_vrfctn, 'our_verf_id':our_verf_id,
 		'retail':retail, 'switch':switch, 'interchange': interchange, 'result': result, 'transactionid':transactionid, 'errordesc':errordesc,
@@ -216,7 +216,7 @@ def cancel_reservation(payment_method, client_no, client_seril, currency, user_b
 	return {'error_msg': error_msg, 'cancellation_status': cancellation_status}
 
 def do_cancel_reservation(payment_method, client_no, client_seril, currency, user_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id):
-	if int(payment_method) == 3 or int(payment_method):
+	if int(payment_method) == 3 or int(payment_method) == 4:
 		return  '', 'true'
 	msg = ''
 	branch_code, branch_ip, branch_port = frappe.db.get_value('Bank Branch',user_branch, ['branch_code', 'ip_address', 'port_number'])
@@ -258,7 +258,7 @@ def do_cancel_reservation(payment_method, client_no, client_seril, currency, use
 
 @frappe.whitelist()
 def push_payment(doc_name, payment_method, client_no, client_serial, our_client_name, our_client_address, our_bank, our_branch, region_code,
-dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no, card_type):
+dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no, card_type, sender_name, sender_region):
 	site_name = get_current_site_name()
 	date = datetime.now()
 	public_path = '/public/files/' 
@@ -275,7 +275,7 @@ dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, be
 	mkdir([site_name + private_path + req_path , site_name + private_path + res_path ])
 	currency_prefix =frappe.db.get_value('Bank Currency', currency, ['currency_prefix'])
 	currency_prefix = currency_prefix if currency_prefix else ''
-	xml_body = create_pp_xml_doc(req_xml_path, payment_method, client_no, client_serial, our_client_name, our_client_address, our_bank, our_branch, region_code, dest_bank, fp_verification_id, amount, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no, card_type)
+	xml_body = create_pp_xml_doc(req_xml_path, payment_method, client_no, client_serial, our_client_name, our_client_address, our_bank, our_branch, region_code, dest_bank, fp_verification_id, amount, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no, card_type, sender_name, sender_region)
 	xml_body = xml_body.encode('utf-8')
 	results = {"cancellation_msg": '', "cancellation_status": 'false', "journal_msg": '', "journal_status": 'false', 'res_status': 'false'}
 	#------------------------------Sending REST request------------------------------

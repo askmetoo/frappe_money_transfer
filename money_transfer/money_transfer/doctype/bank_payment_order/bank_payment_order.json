@@ -11,6 +11,7 @@
   "currency",
   "payment_method",
   "card_type",
+  "sender_name",
   "client_no",
   "c_break_1",
   "transaction_state_sequence",
@@ -18,6 +19,7 @@
   "amount",
   "receiver_bank",
   "card_no",
+  "sender_region",
   "account_sequence",
   "s_break_2",
   "client_name",
@@ -158,7 +160,7 @@
    "fieldname": "payment_method",
    "fieldtype": "Select",
    "label": "Payment Method",
-   "options": "\u0639\u0645\u064a\u0644 - C\n\u0635\u0646\u062f\u0648\u0642 - C\n\u0639\u0645\u064a\u0644 - CLIENT\n\u0635\u0646\u062f\u0648\u0642 - CASH"
+   "options": "\u0639\u0645\u064a\u0644 - C\n\u0635\u0646\u062f\u0648\u0642 - C"
   },
   {
    "default": "001",
@@ -178,7 +180,8 @@
    "default": "0",
    "fieldname": "swift_fee",
    "fieldtype": "Data",
-   "label": "SWIFT Fee"
+   "label": "SWIFT Fee",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -306,9 +309,22 @@
    "fieldtype": "Data",
    "hidden": 1,
    "label": "Card No"
+  },
+  {
+   "fieldname": "sender_name",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Sender Name"
+  },
+  {
+   "fieldname": "sender_region",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Sender Region",
+   "options": "Bank Region"
   }
  ],
- "modified": "2021-07-31 06:26:07.613978",
+ "modified": "2021-08-08 07:38:34.962900",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Order",
