@@ -14,6 +14,7 @@
   "req_bank_lcl_instrm",
   "req_bank_tx_id",
   "req_bank_intr_bk_sttlm_amt",
+  "req_bank_intr_bk_sttlm_amt_ccy",
   "req_bank_chrg_br",
   "req_bank_dbtr",
   "req_bank_pstl_adr",
@@ -179,6 +180,7 @@
   {
    "fieldname": "res_bank_tx_sts",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Response Bank Tx Sts"
   },
   {
@@ -189,16 +191,19 @@
   {
    "fieldname": "status_recieved_flg",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Status Received Flag"
   },
   {
    "fieldname": "psh_sts_rcv_flg",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Push Status Received Flag"
   },
   {
    "fieldname": "psh_sts_rcv_txt",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Push Status Received Text"
   },
   {
@@ -245,9 +250,14 @@
    "fieldname": "sts_rcv_err_desc",
    "fieldtype": "Data",
    "label": "Status Received Error Desc"
+  },
+  {
+   "fieldname": "req_bank_intr_bk_sttlm_amt_ccy",
+   "fieldtype": "Data",
+   "label": "Request Bank Intr Bk Sttlm Amt Ccy"
   }
  ],
- "modified": "2021-08-03 19:30:51.352573",
+ "modified": "2021-08-09 22:11:47.889732",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Received",

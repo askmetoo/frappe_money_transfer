@@ -1,6 +1,16 @@
 from money_transfer.money_transfer.utils import mkdir, get_current_site_name
 from money_transfer.money_transfer.db import get_table_serial_key
 from datetime import datetime
+import threading
+
+def background(f):
+    '''
+    a threading decorator
+    use @background above the function you want to run in the background
+    '''
+    def backgrnd_func(*a, **kw):
+        threading.Thread(target=f, args=a, kwargs=kw).start()
+    return backgrnd_func
 
 def get_service_files_names(operation, file_serial):
 	site_name = get_current_site_name()

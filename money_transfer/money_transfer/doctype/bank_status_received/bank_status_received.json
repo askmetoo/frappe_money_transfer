@@ -1,0 +1,183 @@
+{
+ "creation": "2021-08-08 02:15:50.020596",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "header_from",
+  "header_to",
+  "req_bank_idr",
+  "req_bank_biz_msg_idr",
+  "req_bank_msg_def_idr",
+  "req_bank_cre_dt",
+  "res_bank_biz_msg_idr",
+  "res_bank_msg_def_idr",
+  "res_bank_cre_dt",
+  "req_bank_msg_id",
+  "req_bank_cre_dt_tm",
+  "req_bank_accptnc_dt_tm",
+  "res_orgnl_msg_id",
+  "res_orgnl_msg_nm_id",
+  "res_orgnl_cre_dt_tm",
+  "req_orgnl_tx_id",
+  "req_accptnc_dt_tm",
+  "req_tx_sts",
+  "req_tx_sts_flg",
+  "req_intr_bk_sttlm_amt",
+  "req_intr_bk_sttlm_amt_ccy",
+  "req_adr_line",
+  "req_nm",
+  "req_bank_client_id",
+  "req_bank_prtry_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "header_from",
+   "fieldtype": "Data",
+   "label": "Header From"
+  },
+  {
+   "fieldname": "header_to",
+   "fieldtype": "Data",
+   "label": "Header To"
+  },
+  {
+   "fieldname": "req_bank_idr",
+   "fieldtype": "Data",
+   "label": "Request Bank Idr"
+  },
+  {
+   "fieldname": "req_bank_biz_msg_idr",
+   "fieldtype": "Data",
+   "label": "Request Bank Biz Msg Idr"
+  },
+  {
+   "fieldname": "req_bank_msg_def_idr",
+   "fieldtype": "Data",
+   "label": "Request Bank Msg Def Idr"
+  },
+  {
+   "fieldname": "req_bank_cre_dt",
+   "fieldtype": "Data",
+   "label": "Request Bank  Creation Date"
+  },
+  {
+   "fieldname": "res_bank_biz_msg_idr",
+   "fieldtype": "Data",
+   "label": "Response Bank Biz Msg Idr"
+  },
+  {
+   "fieldname": "res_bank_msg_def_idr",
+   "fieldtype": "Data",
+   "label": "Response Bank Msg Def Idr"
+  },
+  {
+   "fieldname": "res_bank_cre_dt",
+   "fieldtype": "Data",
+   "label": "Response Bank Creation Date"
+  },
+  {
+   "fieldname": "req_bank_msg_id",
+   "fieldtype": "Data",
+   "label": "Request Bank Msg Id"
+  },
+  {
+   "fieldname": "req_bank_cre_dt_tm",
+   "fieldtype": "Data",
+   "label": "Request Bank Creation Date Time"
+  },
+  {
+   "fieldname": "req_bank_accptnc_dt_tm",
+   "fieldtype": "Data",
+   "label": "Request Bank Acceptance Date Time"
+  },
+  {
+   "fieldname": "res_orgnl_msg_id",
+   "fieldtype": "Data",
+   "label": "Res Orgnl Msg Id"
+  },
+  {
+   "fieldname": "res_orgnl_msg_nm_id",
+   "fieldtype": "Data",
+   "label": "Res Orgnl Msg Nm Id"
+  },
+  {
+   "fieldname": "res_orgnl_cre_dt_tm",
+   "fieldtype": "Data",
+   "label": "Res Orgnl Cre Dt Tm"
+  },
+  {
+   "fieldname": "req_orgnl_tx_id",
+   "fieldtype": "Data",
+   "label": "Reqst Orgnl Tx Id"
+  },
+  {
+   "fieldname": "req_accptnc_dt_tm",
+   "fieldtype": "Data",
+   "label": "Reqst Accptnc Dt Tm"
+  },
+  {
+   "fieldname": "req_tx_sts",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reqst Tx Sts"
+  },
+  {
+   "fieldname": "req_tx_sts_flg",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reqst Tx Sts Flg"
+  },
+  {
+   "fieldname": "req_intr_bk_sttlm_amt",
+   "fieldtype": "Data",
+   "label": "Reqst Intr Bk Sttlm Amt"
+  },
+  {
+   "fieldname": "req_adr_line",
+   "fieldtype": "Data",
+   "label": "Reqst Adr Line"
+  },
+  {
+   "fieldname": "req_nm",
+   "fieldtype": "Data",
+   "label": "Reqst Nm"
+  },
+  {
+   "fieldname": "req_bank_client_id",
+   "fieldtype": "Data",
+   "label": "Reqst Bank Client ID"
+  },
+  {
+   "fieldname": "req_bank_prtry_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reqst Bank Prtry ID"
+  },
+  {
+   "fieldname": "req_intr_bk_sttlm_amt_ccy",
+   "fieldtype": "Data",
+   "label": "Reqst Intr Bk Sttlm Amt Ccy"
+  }
+ ],
+ "modified": "2021-08-09 19:18:24.582132",
+ "modified_by": "Administrator",
+ "module": "Money Transfer",
+ "name": "Bank Status Received",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

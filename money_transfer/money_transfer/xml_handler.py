@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from money_transfer.money_transfer.db import get_payment_data, get_status_data
 from xml.etree import ElementTree as et
 
-from money_transfer.money_transfer.utils import float2str
+from money_transfer.money_transfer.utils import console_print, float2str
 
 def getXmlElement(root, element, attributeNames=[], attributes=[]):
     elementChild = root.createElement(element)
@@ -82,7 +82,8 @@ def create_fees_xml_doc(save_path_file, req_bank_id, fees_password, amount, dest
   with open("../apps/money_transfer/money_transfer/money_transfer/req_xml_files/Fees_RQ.xml", "r") as f:
     xml_data = f.read()
     f.close()
-
+  if not amount:
+    amount = 0
   xml_args = {
     "user_id": req_bank_id, "user_pass": fees_password, "amount": float2str(amount), "dest_bank": dest_bank_id, 
     "from_zone": unique_code, "to_zone": zone, "currency": currency_code, "trans_id": fp_verification_id}

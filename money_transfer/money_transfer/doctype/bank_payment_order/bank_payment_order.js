@@ -76,6 +76,7 @@ frappe.ui.form.on('Bank Payment Order', {
 		check_buttons(frm);
 	}
 });
+
 function check_payment_type(frm) {
 	var payment_type = get_payment_type(frm.doc.payment_method);
 	if (payment_type == 1 || payment_type == 2) {

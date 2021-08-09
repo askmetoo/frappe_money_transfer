@@ -95,6 +95,11 @@ def get_data():
 					"type": "doctype",
 					"name": "Bank Payment Received",
 					"label": _("Received Payment Requests"),
+				},
+				{
+					"type": "doctype",
+					"name": "Bank Status Received",
+					"label": _("Received Status Requests"),
 				}
 			]
 		}

@@ -1,6 +1,7 @@
 import socket
 from frappe import _
 from money_transfer.money_transfer.utils import console_print
+import sys
 
 def make_socket_connection(ip, port, msg):
   error_msg = ''
@@ -13,6 +14,11 @@ def make_socket_connection(ip, port, msg):
       s.shutdown(socket.SHUT_RDWR)
     except socket.error:
       error_msg = _('Admin_ServerConnectionError')
+    except:
+      try:
+        error_msg = str(sys.exc_info()[0])
+      except:
+        error_msg = ''
     finally:
       s.close()
   return data, error_msg

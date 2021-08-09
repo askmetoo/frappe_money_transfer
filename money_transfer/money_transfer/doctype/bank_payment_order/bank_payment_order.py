@@ -396,7 +396,7 @@ def push_status(doc_name, our_bank, fp_verification_id):
 	done = False
 	for i in range(5):
 		try:
-			res_xml = session.post(url= api_point, data=xml_body, headers=headers, timeout=5).text
+			res_xml = session.post(url= api_point, data=xml_body, headers=headers, timeout=10).text
 			done = True
 			break
 		except requests.Timeout:
