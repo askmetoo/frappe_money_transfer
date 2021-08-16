@@ -369,7 +369,6 @@ dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, be
 	if res_status == 'ACSC':
 		results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(payment_method, client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
 		if results['cancellation_msg'] == '':
-			time.sleep(3)
 			results['journal_msg'], results['journal_status'] = do_journal(payment_method, client_no, client_serial, our_branch, dest_bank, beneficiary_no, amount, currency, rcv_fee, swift_fee, snd_fee, fp_verification_id)
 			if results['journal_status'] == 'true':
 				results['payment_flg'] = 1

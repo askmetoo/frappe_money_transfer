@@ -7,8 +7,9 @@ def get_customer_details(client_no):
     customer_name, customer_add, customer_no, customer_brn, region_unique_code, customer_error, error_flag = "NA", "NA", "NA", "", "", "", 0
     if not client_no:
         return customer_name, customer_add, customer_no, customer_brn, region_unique_code, 'Error in client no', 1
-    if ":" in client_no:
-        client_no = client_no.strip()[4:]
+    # if ":" in client_no:
+    #     client_no = client_no.strip()[4:]
+    client_no = client_no.strip().split(":")[-1]
     client_no = client_no.strip().zfill(15)
     cli_brn, cli_no, cli_ser, cli_cur = client_no[:3], client_no[3:10], client_no[10:13], client_no[13:15]
     
@@ -51,8 +52,8 @@ def get_customer_details(client_no):
 def make_payment_for_customer(customer_no, req_intr_bk_sttlm_amt, req_orgnl_tx_id, req_bank_prtry_id, req_bank_id, snd_fees, swf_fees, rcv_fees):
     if not customer_no:
         return customer_no, 'Error in customer no', 1
-    if ":" in customer_no:
-        customer_no = customer_no.strip()[4:]
+    #if ":" in customer_no:
+    customer_no = customer_no.strip().split(":")[-1]
     client_no = customer_no.strip().zfill(15)
     cli_brn, cli_no, cli_ser, cli_cur = client_no[:3], client_no[3:10], client_no[10:13], client_no[13:15]
     our_header_name = get_service_control(102)
