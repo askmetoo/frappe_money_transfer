@@ -68,7 +68,7 @@ def Payment():
 	return response
 
 @frappe.whitelist(allow_guest=True)
-def Status():
+def Status2():
 	# Get All Files Names & Paths
 	req_file_name, res_file_name, req_xml_path, res_xml_path, site_name, private_path,  req_path, res_path = get_service_files_names('Status', 'StatusFileSerIn')
 	if frappe.request.data:
@@ -161,6 +161,11 @@ def push_status(req_bank_tx_id, doc_name):
 		save_xml_prtfy(res_xml_path, res_xml)
 		save_payment_file_db(site_name, res_file_name, res_xml_path, private_path, res_path, doc_name)
 		validate_push_status_res(res_xml, doc_name)
+	except requests.Timeout:
+		try:
+			update_psh_status(doc_name, '99', 'pushstatus time out')
+		except:
+			update_psh_status(doc_name, '99', '')
 	except:
 		try:
 			update_psh_status(doc_name, '99', sys.exc_info()[0])
@@ -228,8 +233,8 @@ def validate_status_request(status_xml):
 	(res_status, payment_doc_name, rv_req_bank_id, rv_req_bank_acct_id, rv_req_bank_prtry_id, rv_req_bank_intr_bk_sttlm_amt, rv_req_bank_intr_bk_sttlm_amt_ccy,
 	rv_res_bank_tx_sts, rv_timer_exceed_flg, rv_status_recieved_flg, rv_req_bank_debit_id, rv_req_bank_debit_prt) = get_status_data(req_orgnl_tx_id)
 	req_bank_accptnc_dt_tm = ''
-	print(res_status, payment_doc_name, rv_req_bank_id, rv_req_bank_acct_id, rv_req_bank_prtry_id, rv_req_bank_intr_bk_sttlm_amt, rv_req_bank_intr_bk_sttlm_amt_ccy,
-	rv_res_bank_tx_sts, rv_timer_exceed_flg, rv_status_recieved_flg, rv_req_bank_debit_id, rv_req_bank_debit_prt)
+	# print(res_status, payment_doc_name, rv_req_bank_id, rv_req_bank_acct_id, rv_req_bank_prtry_id, rv_req_bank_intr_bk_sttlm_amt, rv_req_bank_intr_bk_sttlm_amt_ccy,
+	# rv_res_bank_tx_sts, rv_timer_exceed_flg, rv_status_recieved_flg, rv_req_bank_debit_id, rv_req_bank_debit_prt)
 	#or req_bank_prtry_id != rv_req_bank_prtry_id or req_bank_id != rv_req_bank_id or req_bank_client_id != rv_req_bank_acct_id
 	if not validate_req_bank(req_bank_id) or not res_status or rv_res_bank_tx_sts != 'ACSC':
 		status_res_xml, doc_name = create_status_res_xml(str(our_biz_msg_idr_serial), header_from, header_to, req_bank_id, req_bank_biz_msg_idr, req_bank_msg_def_idr, 

@@ -207,7 +207,7 @@ def read_push_status_xml(xml_string):
     header_to = bs_data.find('header:AppHdr').find('header:To', recursive=False).find('header:Id').text.strip() if bs_data.find('header:AppHdr') else ''
     req_bank_biz_msg_idr = bs_data.find('header:AppHdr').find('header:BizMsgIdr', recursive=False).text.strip() if bs_data.find('header:AppHdr') else ''
     req_bank_msg_def_idr = bs_data.find('header:AppHdr').find('header:MsgDefIdr', recursive=False).text.strip() if bs_data.find('header:AppHdr') else ''
-    req_bank_cre_dt = bs_data.find('header:AppHdr').find('header:MsgDefIdr', recursive=False).text.strip() if bs_data.find('header:AppHdr') else ''
+    req_bank_cre_dt = bs_data.find('header:AppHdr').find('header:CreDt', recursive=False).text.strip() if bs_data.find('header:AppHdr') else ''
     
     res_bank_biz_msg_idr = bs_data.find('header:Rltd').find('header:BizMsgIdr').text.strip() if bs_data.find('header:Rltd') else '' 
     res_bank_msg_def_idr = bs_data.find('header:Rltd').find('header:MsgDefIdr').text.strip() if bs_data.find('header:Rltd') else ''
@@ -228,8 +228,8 @@ def read_push_status_xml(xml_string):
     req_nm = bs_data.find('document:Nm').text.strip() if bs_data.find('document:Nm') else ''
     req_adr_line = bs_data.find('document:AdrLine').text.strip() if bs_data.find('document:AdrLine') else ''
 
-    req_bank_client_id = bs_data.find('document:DbtrAcct').find('document:Othr').find('document:Id').text.strip() if bs_data.find('document:DbtrAcct') else ''
-    req_bank_prtry_id = bs_data.find('document:DbtrAcct').find('document:Prtry').text.strip() if bs_data.find('document:DbtrAcct') else ''
+    req_bank_client_id = bs_data.find('document:CdtrAcct').find('document:Othr').find('document:Id').text.strip() if bs_data.find('document:CdtrAcct') else ''
+    req_bank_prtry_id = bs_data.find('document:CdtrAcct').find('document:Prtry').text.strip() if bs_data.find('document:CdtrAcct') else ''
 
     return (header_from, header_to, req_bank_biz_msg_idr, req_bank_msg_def_idr, req_bank_cre_dt, res_bank_biz_msg_idr, res_bank_msg_def_idr, res_bank_cre_dt,
             req_bank_cre_dt_tm, req_bank_msg_id, req_bank_id, res_orgnl_msg_id, res_orgnl_msg_nm_id, res_orgnl_cre_dt_tm, req_orgnl_tx_id, req_tx_sts, 
@@ -242,7 +242,7 @@ def read_status_xml(xml_string):
     header_to = bs_data.find('header:AppHdr').find('header:To', recursive=False).find('header:Id').text.strip() if bs_data.find('header:AppHdr') else ''
     req_bank_biz_msg_idr = bs_data.find('header:AppHdr').find('header:BizMsgIdr', recursive=False).text.strip() if bs_data.find('header:AppHdr') else ''
     req_bank_msg_def_idr = bs_data.find('header:AppHdr').find('header:MsgDefIdr', recursive=False).text.strip() if bs_data.find('header:AppHdr') else ''
-    req_bank_cre_dt = bs_data.find('header:AppHdr').find('header:MsgDefIdr', recursive=False).text.strip() if bs_data.find('header:AppHdr') else ''
+    req_bank_cre_dt = bs_data.find('header:AppHdr').find('header:CreDt', recursive=False).text.strip() if bs_data.find('header:AppHdr') else ''
     
     res_bank_biz_msg_idr = bs_data.find('header:Rltd').find('header:BizMsgIdr').text.strip() if bs_data.find('header:Rltd') else '' 
     res_bank_msg_def_idr = bs_data.find('header:Rltd').find('header:MsgDefIdr').text.strip() if bs_data.find('header:Rltd') else ''

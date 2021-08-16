@@ -8,6 +8,7 @@ def get_table_serial_key(table_name):
 	#frappe.db.set_value('Bank CSSRLCOD', table_name, {"table_serial" : str(int(table_serial) + 1)})
   serial_doc.table_serial = str(int(table_serial) + 1)
   serial_doc.save(ignore_permissions=True)
+  frappe.db.commit()
   return table_serial
 
 def get_service_control(rec_control):
@@ -24,6 +25,7 @@ def save_file_db(site_name, file_name, file_path, private_path, relative_path, d
 	new_url = private_path + relative_path + '/' + file_name
 	
 	frappe.db.sql('UPDATE tabFile SET file_url=%s WHERE name=%s', (new_url,file.name))
+	frappe.db.commit()
 
 def get_verification_data(our_bank, dis_bank, currency):
 	req_bank_id = frappe.db.get_value('Bank Company', our_bank, ['system_code'])
@@ -76,3 +78,28 @@ def get_status_data(our_bank):
 
 	return req_bank, fp_header_name, status_serial
 
+def check_verification_flg(doc_name):
+	res = frappe.db.get_value('Bank Payment Order', doc_name, ["verification_flg"])
+	return False if int(res) == 0 else True
+
+def set_verification_flg(doc_name, flg):
+	'''
+		flg 0 --- unsent
+		flg 1 --- sent
+		flg 2 --- pending
+	'''
+	frappe.db.set_value('Bank Payment Order', doc_name, {"verification_flg": int(flg)}, update_modified=False)
+	frappe.db.commit()
+
+def check_payment_flg(doc_name):
+	res = frappe.db.get_value('Bank Payment Order', doc_name, ["payment_flg"])
+	return False if int(res) == 0 else True
+
+def set_payment_flg(doc_name, flg):
+	'''
+		flg 0 --- unsent
+		flg 1 --- sent
+		flg 2 --- pending
+	'''
+	frappe.db.set_value('Bank Payment Order', doc_name, {"payment_flg": int(flg)}, update_modified=False)
+	frappe.db.commit()

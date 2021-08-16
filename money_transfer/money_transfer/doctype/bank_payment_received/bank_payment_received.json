@@ -65,6 +65,7 @@
   {
    "fieldname": "req_bank_cre_dt",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Request Bank Creation Date"
   },
   {
@@ -257,7 +258,7 @@
    "label": "Request Bank Intr Bk Sttlm Amt Ccy"
   }
  ],
- "modified": "2021-08-09 22:11:47.889732",
+ "modified": "2021-08-16 13:40:14.879532",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Received",

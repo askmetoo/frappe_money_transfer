@@ -13,9 +13,10 @@ from frappe.utils.data import unique
 from money_transfer.money_transfer.utils import mkdir, console_print, get_current_site_name, get_total_amount, num2str, float2str
 from money_transfer.money_transfer.socket_handler import make_socket_connection
 from money_transfer.money_transfer.xml_handler import create_fees_xml_doc, create_pp_xml_doc, create_status_xml_doc, dicttoxml, create_bv_xml_doc, read_xml_payment_data, read_xml_verification_data, read_xml_fees_data
-from money_transfer.money_transfer.db import get_fees_data, get_table_serial_key, get_verification_data, save_file_db
+from money_transfer.money_transfer.db import check_payment_flg, check_verification_flg, get_fees_data, get_table_serial_key, get_verification_data, save_file_db, set_payment_flg, set_verification_flg
 from collections import OrderedDict
 from datetime import datetime
+import time
 import requests
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
@@ -32,6 +33,7 @@ def get_client_info(client_no, client_seril, branch_name, currency):
 	return check_client(client_no, client_seril, branch_name, currency)
 
 def check_client(client_no, client_seril, branch_name, currency, amount=0, rcv_fee=0, swift_fee=0, snd_fee=0, beneficiary_name='', fp_verification_id=''):
+	verification_flg = 2
 	msg = ''
 	branch_code, branch_ip, branch_port = frappe.db.get_value('Bank Branch',branch_name, ['branch_code', 'ip_address', 'port_number'])
 	currency_code = frappe.db.get_value('Bank Currency',currency, ['system_code'])
@@ -57,28 +59,38 @@ def check_client(client_no, client_seril, branch_name, currency, amount=0, rcv_f
 	data, socket_error_msg = make_socket_connection(branch_ip, branch_port, msg_ascii)
 
 	if socket_error_msg == '':
+		verification_flg = 1
 		error_flag = data[0] == 121 # 'y'
 		error_msg = ''
 		if error_flag:
 			error_code = data[1:6].decode("utf-8").strip()
 			error_msg = frappe.db.get_value('Bank System Error', error_code, ['a_name'])
+			if not error_msg:
+				error_msg = error_code
 		client_name = data[140:189].decode("iso8859_6")
 		client_region_code = data[200:203].decode("utf-8")
 		client_region = frappe.db.get_value('Bank Region',{'region_code':client_region_code}, ['a_name'])
 		res_status = 'true'
 		result = {
-			"res_status":res_status, "error_msg": error_msg, "client_name": client_name, "client_region_code":client_region_code, "client_region": client_region
+			"res_status":res_status, "error_msg": error_msg, "client_name": client_name, "client_region_code":client_region_code, "client_region": client_region, 'verification_flg': verification_flg
 		}
 	else:
+		verification_flg = 0
 		error_msg = socket_error_msg
 		res_status = 'false'
 		result = {
-			"res_status":res_status, "error_msg": error_msg
+			"res_status":res_status, "error_msg": error_msg, 'verification_flg': verification_flg
 		}
 	return result
 
 @frappe.whitelist()
 def verification(client_no, client_seril, our_bank, user_branch, dest_bank, beneficiary_no, account_type, doc_name, amount, currency, payment_method):
+	verification_flg = 2
+	#------------------------------Check if the verification is sent------------------------------
+	if check_verification_flg(doc_name):
+		return {'verification_flg': verification_flg}
+	set_verification_flg(doc_name, 2)
+	
 	site_name = get_current_site_name()
 	date = datetime.now()
 	public_path = '/public/files/' 
@@ -97,17 +109,17 @@ def verification(client_no, client_seril, our_bank, user_branch, dest_bank, bene
 
 	req_bank_id, dis_bank_id, fp_header_name, acmt_req, verification_serial, currency_prefix = get_verification_data(our_bank, dest_bank, currency)
 	xml_body, our_verf_id = create_bv_xml_doc(req_xml_path, req_bank_id, dis_bank_id, fp_header_name, acmt_req, verification_serial, currency_prefix + str(beneficiary_no), acc_type)
-
+	save_file_db(site_name, req_file_name, req_xml_path, private_path, req_path, doc_name)
 	#------------------------------Sending REST request------------------------------
 	try:
 		api_point = frappe.db.get_value('Bank Service Control', "251", ['rec_text'])
 		headers = {'Content-Type': 'application/xml'}
-		session = requests.Session()
-		retry = Retry(connect=3, backoff_factor=0.5)
-		adapter = HTTPAdapter(max_retries=retry)
-		session.mount('http://', adapter)
-		session.mount('https://', adapter)
-		res_xml = session.post(url= api_point, data=xml_body.encode("utf-8"), headers=headers).text
+		# session = requests.Session()
+		# retry = Retry(connect=3, backoff_factor=0.5)
+		# adapter = HTTPAdapter(max_retries=retry)
+		# session.mount('http://', adapter)
+		# session.mount('https://', adapter)
+		res_xml = requests.post(url= api_point, data=xml_body.encode("utf-8"), headers=headers, timeout=10).text
 
 		with open(res_xml_path, "w") as f:
 			soup = BeautifulSoup(res_xml, "xml")
@@ -115,45 +127,68 @@ def verification(client_no, client_seril, our_bank, user_branch, dest_bank, bene
 			f.close()
 		rpt_vrfctn, rpt_rsn, pty_nm, fp_vrfctn = read_xml_verification_data(res_xml)
 	except requests.exceptions.ConnectionError:
+		verification_flg = 0
+		set_verification_flg(doc_name, 0)
 		results = {
 		'error_msg':'', 'pv_Vrfctn': 'false', 'pv_Rsn' : '', 'pv_Nm': '', 'pv_FPVrfctn':'', 'our_verf_id': '',
 		'retail': 0, 'switch': 0, 'interchange': 0, 'result': 'false', 'transactionid': '', 'errordesc': 'System connection error in verification request',
-		'client_name': '', 'client_address': '', 'client_region_code': ''
+		'client_name': '', 'client_address': '', 'client_region_code': '', 'verification_flg': verification_flg
+		}
+		return results
+	except requests.exceptions.Timeout:
+		verification_flg = 0
+		set_verification_flg(doc_name, 0)
+		results = {
+		'error_msg':'', 'pv_Vrfctn': 'false', 'pv_Rsn' : '', 'pv_Nm': '', 'pv_FPVrfctn':'', 'our_verf_id': '',
+		'retail': 0, 'switch': 0, 'interchange': 0, 'result': 'false', 'transactionid': '', 'errordesc': 'System connection timeout in verification request',
+		'client_name': '', 'client_address': '', 'client_region_code': '', 'verification_flg': verification_flg
 		}
 		return results
 	except:
+		verification_flg = 0
+		set_verification_flg(doc_name, 0)
 		results = {
 		'error_msg':'', 'pv_Vrfctn': 'false', 'pv_Rsn' : '', 'pv_Nm': '', 'pv_FPVrfctn':'', 'our_verf_id': '',
 		'retail': 0, 'switch': 0, 'interchange': 0, 'result': 'false', 'transactionid': '', 'errordesc': 'An error occurred while requesting verification',
-		'client_name': '', 'client_address': '', 'client_region_code': ''
+		'client_name': '', 'client_address': '', 'client_region_code': '', 'verification_flg': verification_flg
 		}
 		return results
 	#------------------------------Saving files to database------------------------------
-	save_file_db(site_name, req_file_name, req_xml_path, private_path, req_path, doc_name)
+	
 	save_file_db(site_name, res_file_name, res_xml_path, private_path, res_path, doc_name)
 	if rpt_vrfctn != 'true' and rpt_rsn != 'SUCC':
+		verification_flg = 0
+		set_verification_flg(doc_name, 0)
 		results = {
 		'error_msg':'', 'pv_Vrfctn': rpt_vrfctn, 'pv_Rsn' : rpt_rsn, 'pv_Nm': pty_nm, 'pv_FPVrfctn':fp_vrfctn, 'our_verf_id':our_verf_id,
 		'retail': 0, 'switch': 0, 'interchange': 0, 'result': 'false', 'transactionid': '', 'errordesc': '',
-		'client_name': '', 'client_address': '', 'client_region_code': ''
+		'client_name': '', 'client_address': '', 'client_region_code': '', 'verification_flg': verification_flg
 		}
 		return results
 	zone = pty_nm[-2:]
 	#----------------------------get fees if enabled----------------------------------
 	retail, switch, interchange, result, transactionid, errordesc = push_transfer_fees(site_name, public_path, private_path, req_path, res_path, doc_name, our_bank, user_branch, dest_bank, amount, zone, currency, fp_vrfctn)
-	#------------------------------Reserving money------------------------------
-	error_msg, client_name, client_address, client_region_code = '', '', '', ''
-
+	
+	error_msg, client_name, client_address, client_region_code, verification_flg = '', '', '', '', 0
+	
 	if result == 'Success':
 		if int(payment_method) == 1 or int(payment_method) == 2:
+			#------------------------------Reserving money------------------------------
 			res = check_client(client_no, client_seril, user_branch, currency, amount, rcv_fee= interchange, swift_fee=switch, snd_fee=retail, beneficiary_name=pty_nm, fp_verification_id=fp_vrfctn)
 			error_msg = res['error_msg']
 			if res['res_status'] == 'true':
-				client_name, client_address, client_region_code = res["client_name"], res['client_region'], res["client_region_code"]
+				set_verification_flg(doc_name, 1)
+				client_name, client_address, client_region_code, verification_flg = res["client_name"], res['client_region'], res["client_region_code"], res["verification_flg"]
+			else:
+				verification_flg = 0
+				set_verification_flg(doc_name, 0)
+	else:
+		verification_flg = 0
+		set_verification_flg(doc_name, 0)	
 	results = {
 		'error_msg':error_msg,'pv_Vrfctn': rpt_vrfctn, 'pv_Rsn' : rpt_rsn, 'pv_Nm': pty_nm, 'pv_FPVrfctn':fp_vrfctn, 'our_verf_id':our_verf_id,
 		'retail':retail, 'switch':switch, 'interchange': interchange, 'result': result, 'transactionid':transactionid, 'errordesc':errordesc,
-		'client_name': client_name, 'client_address': client_address, 'client_region_code': client_region_code
+		'client_name': client_name, 'client_address': client_address, 'client_region_code': client_region_code, 'verification_flg': verification_flg
 	}
 	return results
 
@@ -180,20 +215,27 @@ def push_transfer_fees(site_name, public_path, private_path, req_path, res_path,
 			fees_rq_file_path = site_name + public_path + fees_rq_file_name
 			fees_rs_file_path = site_name + public_path + fees_rs_file_name
 			fees_xml = get_transfer_fees(fees_rq_file_path, our_bank, user_branch, dest_bank, amount, zone, currency, fp_vrfctn)
-			console_print(fees_xml)
+			save_file_db(site_name, fees_rq_file_name, fees_rq_file_path, private_path, req_path, doc_name)
 			# Sending REST request
 			try:
-				session = requests.Session()
-				retry = Retry(connect=3, backoff_factor=0.5)
-				adapter = HTTPAdapter(max_retries=retry)
-				session.mount('http://', adapter)
-				session.mount('https://', adapter)
+				# session = requests.Session()
+				# retry = Retry(connect=3, backoff_factor=0.5)
+				# adapter = HTTPAdapter(max_retries=retry)
+				# session.mount('http://', adapter)
+				# session.mount('https://', adapter)
 				headers = {'Content-Type': 'application/xml'} 
-				fees_res_xml = session.post(url= fees_api_point, data=fees_xml.encode('utf-8'), headers=headers).text
+				fees_res = requests.post(url= fees_api_point, data=fees_xml.encode('utf-8'), headers=headers, timeout=7)
 			except requests.exceptions.ConnectionError:
 				return 0, 0, 0, "false", "", "System connection error in fees request"
+			except requests.exceptions.Timeout:
+				return 0, 0, 0, "false", "", "System connection timeout in fees request"
 			except:
 				return 0, 0, 0, "false", "", "An error occurred while requesting fees"
+			if 200 <= int(fees_res.status_code) <= 299:
+				fees_res_xml = fees_res.text
+			else:
+				return 0, 0, 0, "false", "", "An error occurred while requesting fees"
+			
 			retail, switch, interchange, result, transactionid, errordesc = read_xml_fees_data(fees_res_xml)
 			
 
@@ -201,7 +243,7 @@ def push_transfer_fees(site_name, public_path, private_path, req_path, res_path,
 				f.write(fees_res_xml)
 				f.close()
 
-			save_file_db(site_name, fees_rq_file_name, fees_rq_file_path, private_path, req_path, doc_name)
+			
 			save_file_db(site_name, fees_rs_file_name, fees_rs_file_path, private_path, res_path, doc_name)
 		else:
 			retail, switch, interchange, result, transactionid, errordesc = 0, 0, 0, "false", "", "Fees url not defined"
@@ -248,6 +290,8 @@ def do_cancel_reservation(payment_method, client_no, client_seril, currency, use
 		if error_flag:
 			error_code = data[1:6].decode("utf-8").strip()
 			error_msg = frappe.db.get_value('Bank System Error', error_code, ['a_name'])
+			if not error_msg:
+				error_msg = error_code
 		res_status = "true"
 	else:
 		error_msg = socket_error_msg
@@ -259,6 +303,12 @@ def do_cancel_reservation(payment_method, client_no, client_seril, currency, use
 @frappe.whitelist()
 def push_payment(doc_name, payment_method, client_no, client_serial, our_client_name, our_client_address, our_bank, our_branch, region_code,
 dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no, card_type, sender_name, sender_region):
+	payment_flg = 2
+	#------------------------------Check if the verification is sent------------------------------
+	if check_payment_flg(doc_name):
+		return {'payment_flg': payment_flg}
+	set_payment_flg(doc_name, 2)
+
 	site_name = get_current_site_name()
 	date = datetime.now()
 	public_path = '/public/files/' 
@@ -276,8 +326,10 @@ dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, be
 	currency_prefix =frappe.db.get_value('Bank Currency', currency, ['currency_prefix'])
 	currency_prefix = currency_prefix if currency_prefix else ''
 	xml_body = create_pp_xml_doc(req_xml_path, payment_method, client_no, client_serial, our_client_name, our_client_address, our_bank, our_branch, region_code, dest_bank, fp_verification_id, amount, currency, beneficiary_name, beneficiary_no, account_type, op_type, card_no, card_type, sender_name, sender_region)
+	save_file_db(site_name, req_file_name, req_xml_path, private_path, req_path, doc_name)
+
 	xml_body = xml_body.encode('utf-8')
-	results = {"cancellation_msg": '', "cancellation_status": 'false', "journal_msg": '', "journal_status": 'false', 'res_status': 'false'}
+	results = {"cancellation_msg": '', "cancellation_status": 'false', "journal_msg": '', "journal_status": 'false', 'res_status': 'false', 'payment_msg': '','payment_flg': payment_flg}
 	#------------------------------Sending REST request------------------------------
 	api_point = frappe.db.get_value('Bank Service Control', "252", ['rec_text'])
 	headers = {'Content-Type': 'application/xml'}
@@ -293,25 +345,46 @@ dest_bank, fp_verification_id, amount, rcv_fee, snd_fee, swift_fee, currency, be
 		is_push_payment = False
 		res_xml, status_error = push_status(doc_name, our_bank, fp_verification_id)
 		if status_error != '':
+			results['payment_flg'] = 0
+			set_payment_flg(doc_name, 0)
 			results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(payment_method, client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
 			return results
 	except requests.exceptions.ConnectionError:
+		results['payment_flg'] = 0
+		results['payment_msg'] = 'Connection error with services'
+		set_payment_flg(doc_name, 0)
 		is_push_payment = False
-		
+	except:
+		results['payment_flg'] = 0
+		results['payment_msg'] = 'unknown error occurred with services'
+		set_payment_flg(doc_name, 0)
+		is_push_payment = False
 
 	res_status = read_xml_payment_data(res_xml)
 	results['res_status'] = res_status
 	#------------------------------Saving files to database------------------------------
-	save_file_db(site_name, req_file_name, req_xml_path, private_path, req_path, doc_name)
 	if is_push_payment:
 		save_file_db(site_name, res_file_name, res_xml_path, private_path, res_path, doc_name)
 
 	if res_status == 'ACSC':
 		results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(payment_method, client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
 		if results['cancellation_msg'] == '':
-			results['journal_msg'], results['journal_status'] = do_journal(payment_method, client_no, client_serial, our_branch, dest_bank, currency_prefix+beneficiary_no, amount, currency, rcv_fee, swift_fee, snd_fee, fp_verification_id)
+			time.sleep(3)
+			results['journal_msg'], results['journal_status'] = do_journal(payment_method, client_no, client_serial, our_branch, dest_bank, beneficiary_no, amount, currency, rcv_fee, swift_fee, snd_fee, fp_verification_id)
+			if results['journal_status'] == 'true':
+				results['payment_flg'] = 1
+				set_payment_flg(doc_name, 1)
+			else:
+				set_payment_flg(doc_name, 0)
+				results['payment_flg'] = 0
+		else:
+			set_payment_flg(doc_name, 0)
+			results['payment_flg'] = 0
 	else: 
+		set_payment_flg(doc_name, 0)
+		results['payment_flg'] = 0
 		results['cancellation_msg'], results['cancellation_status'] = do_cancel_reservation(payment_method, client_no, client_serial, currency, our_branch, amount, rcv_fee, swift_fee, snd_fee, beneficiary_name, fp_verification_id)
+
 	return results
 
 
@@ -354,6 +427,8 @@ def do_journal(payment_method, client_no, client_serial, user_branch, dest_bank,
 		if error_flag:
 			error_code = data[1:6].decode("utf-8").strip()
 			error_msg = frappe.db.get_value('Bank System Error', error_code, ['a_name'])
+			if not error_msg:
+				error_msg = error_code
 		res_status = "true"
 	else:
 		error_msg = socket_error_msg

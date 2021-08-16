@@ -31,6 +31,7 @@ def save_verification_req_db(client_no, bank_header, req_bank_id, bank_biz_msg_i
 		"error_flg": error_flg
 	})
 	vrfctn_doc.insert(ignore_permissions=True)
+	frappe.db.commit()
 	return vrfctn_doc.name
 
 def validate_account_type(account_type):
@@ -49,6 +50,7 @@ def save_verification_file_db(site_name, file_name, file_path, private_path, rel
 	new_url = private_path + relative_path + '/' + file_name
 	
 	frappe.db.sql('UPDATE tabFile SET file_url=%s WHERE name=%s', (new_url,file.name))
+	frappe.db.commit()
 
 def save_payment_file_db(site_name, file_name, file_path, private_path, relative_path, doc_name):
 	doc = 'Bank Payment Received'
@@ -61,6 +63,7 @@ def save_payment_file_db(site_name, file_name, file_path, private_path, relative
 	new_url = private_path + relative_path + '/' + file_name
 	
 	frappe.db.sql('UPDATE tabFile SET file_url=%s WHERE name=%s', (new_url,file.name))
+	frappe.db.commit()
 
 def save_status_file_db(site_name, file_name, file_path, private_path, relative_path, doc_name):
 	doc = 'Bank Status Received'
@@ -73,6 +76,7 @@ def save_status_file_db(site_name, file_name, file_path, private_path, relative_
 	new_url = private_path + relative_path + '/' + file_name
 	
 	frappe.db.sql('UPDATE tabFile SET file_url=%s WHERE name=%s', (new_url,file.name))
+	frappe.db.commit()
 
 def check_duplicate_payment(req_bank_tx_id):
 	tx_id = frappe.db.get_value("Bank Payment Received", {"req_bank_tx_id": req_bank_tx_id}, ["req_bank_tx_id"])
@@ -130,6 +134,7 @@ def save_payment_req_db(req_bank_id, req_bank_biz_msg_idr, req_bank_msg_def_idr,
 		"req_bank_debit_id": req_bank_debit_id
 	})
 	payment_doc.insert(ignore_permissions=True)
+	frappe.db.commit()
 	return payment_doc.name
 
 def get_payment_status_flgs(doc_name):
@@ -156,6 +161,7 @@ def update_timer_flg(doc_name, timer):
 	frappe.db.set_value("Bank Payment Received", doc_name, {
 		'time_exceed_flg': str(timer)
 	})
+	frappe.db.commit()
 
 def update_psh_status(doc_name, flg, txt, error=''):
 	#frappe.db.set_value("Bank Payment Received", {"req_bank_tx_id": req_bank_tx_id}, {"time_exceed_flg": str(timer)})
@@ -173,11 +179,13 @@ def update_psh_status(doc_name, flg, txt, error=''):
 		'psh_sts_rcv_txt': str(txt),
 		'sts_rcv_err_desc': error
 	})
+	frappe.db.commit()
 
 def update_status_flg(doc_name, flg):
 	frappe.db.set_value("Bank Payment Received", doc_name, {
 		'status_recieved_flg': str(flg)
 	})
+	frappe.db.commit()
 
 def get_payment_status_data(doc_name):
 	res = frappe.db.get_value("Bank Payment Received", doc_name, ["res_bank_id", "res_bank_biz_msg_idr", "req_bank_biz_msg_idr"])
@@ -224,6 +232,7 @@ def update_payment_fees_data(doc_name, retail, switch, interchange, transaction_
 		"result_fees":result,
 		"error_desc_fees":error_desc,
 	})
+	frappe.db.commit()
 
 def get_status_data(req_bank_tx_id):
 	res = frappe.db.get_value("Bank Payment Received", {"req_bank_tx_id":req_bank_tx_id}, ["name","req_bank_id", "req_bank_acct_id", "req_bank_prtry_id", "req_bank_intr_bk_sttlm_amt", "req_bank_intr_bk_sttlm_amt_ccy", "res_bank_tx_sts", "time_exceed_flg", "status_recieved_flg", "req_bank_debit_id", "req_bank_debit_prt"])
@@ -283,4 +292,5 @@ req_adr_line, req_nm, req_bank_client_id, req_bank_prtry_id):
 		"req_bank_prtry_id": req_bank_prtry_id,
 	})
 	status_doc.insert(ignore_permissions=True)
+	frappe.db.commit()
 	return status_doc.name

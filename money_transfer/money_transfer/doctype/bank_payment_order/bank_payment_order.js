@@ -115,12 +115,12 @@ function check_buttons(frm) {
 		frm.set_df_property("payment_method", 'read_only', 1)
 		disable_client_info_fields(frm);
 		disable_verification_fields(frm);
-		frm.add_custom_button(__('Push Payment'), function () {
+		frm.add_custom_button('Push Payment', function () {
 			push_payment_on_click(frm);
 			
 		});
 		if (payment_type == 1 || payment_type == 2) {
-			frm.add_custom_button(__('Cancel The Operation'), function () {
+			frm.add_custom_button('Cancel The Operation', function () {
 				cancel_on_click(frm);
 			});
 		}
@@ -130,18 +130,18 @@ function check_buttons(frm) {
 		if (payment_type == 1 || payment_type == 2) {
 			if (frm.doc.client_name == '_') {
 				enable_client_info_fields(frm);
-				frm.add_custom_button(__('Get Client Information'), function () {
+				frm.add_custom_button('Get Client Information', function () {
 					get_client_info_on_click(frm)
 				});
 			} else {
 				frm.set_df_property("payment_method", 'read_only', 1)
 				disable_client_info_fields(frm);
-				frm.add_custom_button(__('Verification'), function () {
+				frm.add_custom_button('Verification', function () {
 					verification_on_click(frm)
 				});
 			}
 		} else {
-			frm.add_custom_button(__('Verification'), function () {
+			frm.add_custom_button('Verification', function () {
 				verification_on_click(frm)
 			});
 		}
@@ -187,6 +187,7 @@ function verification_on_click(frm) {
 		})
 	}
 }
+
 function verification_call(client_no, payment_method, frm) {
 	frappe.call({
 		"method": "money_transfer.money_transfer.doctype.bank_payment_order.bank_payment_order.verification",
@@ -204,47 +205,49 @@ function verification_call(client_no, payment_method, frm) {
 			"payment_method": payment_method
 		},
 		callback: function (r) {
-			if (r.message.pv_Vrfctn == "true") {
-				frm.set_value('verification_status', r.message.pv_Vrfctn)
-				frm.set_value('reason', r.message.pv_Rsn)
-				frm.set_value('beneficiary_name', r.message.pv_Nm)
-				frm.set_value('fp_verification_id', r.message.pv_FPVrfctn)
-				frm.set_value('our_verification_id', r.message.our_verf_id)
-				frm.set_value('zone', r.message.pv_Nm.substring(r.message.pv_Nm.length - 2))
-				frm.remove_custom_button('Verification');
+			if (r.message.verification_flg == 1 || r.message.verification_flg == 0){
+				if (r.message.pv_Vrfctn == "true") {
+					frm.set_value('verification_status', r.message.pv_Vrfctn)
+					frm.set_value('reason', r.message.pv_Rsn)
+					frm.set_value('beneficiary_name', r.message.pv_Nm)
+					frm.set_value('fp_verification_id', r.message.pv_FPVrfctn)
+					frm.set_value('our_verification_id', r.message.our_verf_id)
+					frm.set_value('zone', r.message.pv_Nm.substring(r.message.pv_Nm.length - 2))
+					frm.remove_custom_button('Verification');
 
-			} else {
-				frm.set_value('verification_status', r.message.pv_Vrfctn)
-				frm.set_value('reason', r.message.pv_Rsn)
-				frm.set_value('transaction_notes', r.message.errordesc)
-				frm.set_value('transaction_state_sequence', 'Cancel')
-				frm.save()
-				return;
-			}
-			if (r.message.result == 'Success') {
-				frm.set_value('transaction_status', r.message.result)
-				frm.set_value('sender_bank_fee', r.message.retail)
-				frm.set_value('swift_fee', r.message.switch)
-				frm.set_value('receiver_bank_fee', r.message.interchange)
+				} else {
+					frm.set_value('verification_status', r.message.pv_Vrfctn)
+					frm.set_value('reason', r.message.pv_Rsn)
+					frm.set_value('transaction_notes', r.message.errordesc)
+					frm.set_value('transaction_state_sequence', 'Cancel')
+					frm.save()
+					return;
+				}
+				if (r.message.result == 'Success') {
+					frm.set_value('transaction_status', r.message.result)
+					frm.set_value('sender_bank_fee', r.message.retail)
+					frm.set_value('swift_fee', r.message.switch)
+					frm.set_value('receiver_bank_fee', r.message.interchange)
 
-			} else {
-				frm.set_value('transaction_status', r.message.result)
-				frm.set_value('transaction_notes', r.message.errordesc)
-				frm.set_value('transaction_state_sequence', 'Cancel')
+				} else {
+					frm.set_value('transaction_status', r.message.result)
+					frm.set_value('transaction_notes', r.message.errordesc)
+					frm.set_value('transaction_state_sequence', 'Cancel')
+					frm.save()
+					return;
+				}
+				if (r.message.error_msg != '') {
+					frm.set_value('transaction_state_sequence', 'Idle')
+					frm.set_value('transaction_status', 'false')
+					frm.set_value('transaction_notes', r.message.error_msg)
+				} else {
+					frm.set_value('transaction_state_sequence', 'UnPost')
+					frm.set_value('client_name', r.message.client_name)
+					frm.set_value('region_code', r.message.client_region_code)
+					frm.set_value('region', r.message.client_address)
+				}
 				frm.save()
-				return;
 			}
-			if (r.message.error_msg != '') {
-				frm.set_value('transaction_state_sequence', 'Idle')
-				frm.set_value('transaction_status', 'false')
-				frm.set_value('transaction_notes', r.message.error_msg)
-			} else {
-				frm.set_value('transaction_state_sequence', 'UnPost')
-				frm.set_value('client_name', r.message.client_name)
-				frm.set_value('region_code', r.message.client_region_code)
-				frm.set_value('region', r.message.client_address)
-			}
-			frm.save()
 		}
 	})
 }
@@ -297,7 +300,7 @@ function get_client_info_on_click(frm) {
 				frm.set_value('region_code', r.message.client_region_code)
 				frm.set_value('region', r.message.client_region)
 				frm.remove_custom_button('Get Client Information');
-				frm.add_custom_button(__('Verification'), function () {
+				frm.add_custom_button('Verification', function () {
 					verification_on_click(frm);
 				})
 				frm.set_value('transaction_notes', __('Client information fetched successfully'))
@@ -389,22 +392,28 @@ function push_payment_on_click(frm) {
 			'sender_region':sender_region
 		},
 		callback: function (r) {
-			frm.set_value('payment_status', r.message.res_status)
-			frm.set_value('transaction_status', r.message.journal_status)
-			if (r.message.cancellation_msg != '') {
-				frm.set_value('transaction_notes', r.message.cancellation_msg)
-				frm.set_value('transaction_state_sequence', 'UnPost')
-			}
-			else if (r.message.journal_msg != '') {
-				frm.set_value('transaction_notes', r.message.journal_msg)
-				frm.set_value('transaction_state_sequence', 'Cancel')
-			} else {
-				if (r.message.res_status == 'ACSC')
-					frm.set_value('transaction_state_sequence', 'Post')
-				else
+			if (r.message.payment_flg == 1 || r.message.payment_flg == 0){
+				frm.set_value('payment_status', r.message.res_status)
+				frm.set_value('transaction_status', r.message.journal_status)
+				if(r.message.payment_msg != ''){
+					frm.set_value('transaction_notes', r.message.payment_msg)
+				}
+				if (r.message.cancellation_msg != '') {
+					frm.set_value('transaction_notes', r.message.cancellation_msg)
+					frm.set_value('transaction_state_sequence', 'UnPost')
+				}
+				else if (r.message.journal_msg != '') {
+					frm.set_value('transaction_notes', r.message.journal_msg)
 					frm.set_value('transaction_state_sequence', 'Cancel')
+				} else {
+					if (r.message.res_status == 'ACSC')
+						frm.set_value('transaction_state_sequence', 'Post')
+					else
+						frm.set_value('transaction_state_sequence', 'Cancel')
+				}
+				frm.save()
 			}
-			frm.save()
+			
 		}
 	})
 }

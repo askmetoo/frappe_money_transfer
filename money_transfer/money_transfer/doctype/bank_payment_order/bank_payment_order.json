@@ -48,7 +48,9 @@
   "reason",
   "fp_verification_id",
   "s_break_6",
-  "payment_status"
+  "payment_status",
+  "verification_flg",
+  "payment_flg"
  ],
  "fields": [
   {
@@ -322,9 +324,23 @@
    "hidden": 1,
    "label": "Sender Region",
    "options": "Bank Region"
+  },
+  {
+   "default": "0",
+   "fieldname": "verification_flg",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Verification Flag"
+  },
+  {
+   "default": "0",
+   "fieldname": "payment_flg",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Payment Flag"
   }
  ],
- "modified": "2021-08-08 07:38:34.962900",
+ "modified": "2021-08-16 12:15:50.779316",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Order",

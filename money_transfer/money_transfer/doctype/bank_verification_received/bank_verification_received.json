@@ -54,6 +54,7 @@
   {
    "fieldname": "req_bank_cre_dt",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Request Bank Creation Date"
   },
   {
@@ -100,7 +101,7 @@
    "label": "Error Flag"
   }
  ],
- "modified": "2021-08-03 21:31:18.596537",
+ "modified": "2021-08-16 13:40:44.960797",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Verification Received",
