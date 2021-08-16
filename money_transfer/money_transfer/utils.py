@@ -27,8 +27,8 @@ def console_print(stm):
   print("*" * 100)
 
 def get_current_site_name():
-  #return 'yibbank.com'
-  return 'islah.erp'
+  return 'yibbank.com'
+  #return 'islah.erp'
   #return get_site_name(frappe.local.request.host)
 
 
