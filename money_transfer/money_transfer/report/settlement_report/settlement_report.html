@@ -1,0 +1,122 @@
+<style>
+    .header{
+        width: 100%;
+        margin: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid;
+    }
+    .logo{
+        margin-right: 10px;
+    }
+    .t-center{
+        text-align: center;
+    }
+    .f-12{
+        font-size: 1.2em;
+    }
+    .f-bold{
+        font-weight: bold;
+    }
+    .r-container{
+        padding: 10px 20px;
+    }
+    .main-table{
+        margin: 10px auto;
+    }
+    th{
+        text-align: center;
+    }
+    table{
+        width: 100%;
+    }
+    .w-50{
+        width: 50%;
+    }
+    .w-33{
+        width: 33%;
+    }
+    th, td{
+        border: 1px solid;
+    }
+</style>
+<div class="r-container">
+    <div class="header">
+        <div class="t-center f-12">
+            <div class="f-bold f-12">Islamic Bank Of Yemen</div>
+            <div>For financing and investment</div>
+            <div>Head Office</div>
+        </div>
+        <div class="logo">
+            <img src="/files/logo.png" />
+        </div>
+    </div>
+    <div class="main">
+        <div class="f-bold f-12 t-center">Settlement Report</div>
+        <div class="main-table">
+            <table>
+                    <tr>
+                        <th colspan="3" class="w-33">From: {%= filters.from %} </th>
+                        <th colspan="3" class="w-33">To:  {%= filters.to %} </th>
+                        <th colspan="3" class="w-33">Currency:  {%= filters.currency %} </th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">Participant</th>
+                        <th  colspan="4">Amount Transferred</th>
+                        <th  colspan="4">Amount Received</th>
+                    </tr>
+                    <tr>
+                        <th>Total</th>
+                        <th>No</th>
+                        <th>Interchange</th>
+                        <th>Grand total</th>
+                        <th>Total</th>
+                        <th>No</th>
+                        <th>Interchange</th>
+                        <th>Grand total</th>
+                    </tr>
+                    {% for(var i=0, l=data.length; i<l; i++) { %}
+                        <tr>
+                            <td>{{ data[i].bank }}</td>
+                            <td>{{ data[i].snd_total_amount }}</td>
+                            <td>{{ data[i].snd_count }}</td>
+                            <td>{{ data[i].snd_total_fees }}</td>
+                            <td>{{ data[i].snd_total_amount_fees }}</td>
+                            <td>{{ data[i].rcv_total_amount }}</td>
+                            <td>{{ data[i].rcv_count }}</td>
+                            <td>{{ data[i].rcv_total_fees }}</td>
+                            <td>{{ data[i].rcv_total_amount_fees }}</td>
+                        </tr>
+                    {% } %}
+            </table>
+        </div>
+        {% if (filters.begin) { %}
+        <div class="balance-tabel">
+            <table>
+                <tr>
+                    <th colspan="2">Balance</th>
+                    <th colspan="2">Net Position</th>
+                    <th rowspan="2">Check Reports</th>
+                    <th rowspan="2">Comments</th>
+                </tr>
+                <tr>
+                    <th>Beginning</th>
+                    <th>Closing</th>
+                    <th>Beginning</th>
+                    <th>Closing</th>
+                </tr>
+                <tr>
+                    <td>{%= filters.begin %}</td>
+                    {% close = filters.begin - data[l-1].snd_total_amount_fees + data[l-1].rcv_total_amount_fees  %}
+                    <td>{{ close.toFixed(2) }}</td>
+                    <td> {{ data[l-1].snd_total_amount_fees }}</td>
+                    <td> {{ data[l-1].rcv_total_amount_fees }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+        {% } %}
+    </div>
+</div>

@@ -13,6 +13,13 @@ def get_data():
 					"name": "Bank Payment Order",
 					"label": _("Payment Order"),
 				},	
+				{
+					"type": "report",
+					"name": "Settlement Report",
+					"is_query_report": True,
+					"doctype": "Bank Payment Order",
+					"label": _("Settlement Report"),
+				},	
 			]
 		},
         {

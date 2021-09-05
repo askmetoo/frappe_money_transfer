@@ -218,16 +218,19 @@
    "label": "Request Bank Debit Prt"
   },
   {
+   "default": "0",
    "fieldname": "retail_fees",
    "fieldtype": "Data",
    "label": "Retail Fees"
   },
   {
+   "default": "0",
    "fieldname": "switch_fees",
    "fieldtype": "Data",
    "label": "Switch Fees"
   },
   {
+   "default": "0",
    "fieldname": "interchange_fees",
    "fieldtype": "Data",
    "label": "Interchange Fees"
@@ -258,7 +261,7 @@
    "label": "Request Bank Intr Bk Sttlm Amt Ccy"
   }
  ],
- "modified": "2021-08-16 13:40:14.879532",
+ "modified": "2021-08-30 16:34:38.358370",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Received",
