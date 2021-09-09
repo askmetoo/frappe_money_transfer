@@ -236,7 +236,7 @@ def validate_status_request(status_xml):
 	# print(res_status, payment_doc_name, rv_req_bank_id, rv_req_bank_acct_id, rv_req_bank_prtry_id, rv_req_bank_intr_bk_sttlm_amt, rv_req_bank_intr_bk_sttlm_amt_ccy,
 	# rv_res_bank_tx_sts, rv_timer_exceed_flg, rv_status_recieved_flg, rv_req_bank_debit_id, rv_req_bank_debit_prt)
 	#or req_bank_prtry_id != rv_req_bank_prtry_id or req_bank_id != rv_req_bank_id or req_bank_client_id != rv_req_bank_acct_id
-	if not validate_req_bank(req_bank_id) or not res_status or rv_res_bank_tx_sts != 'ACSC':
+	if not validate_req_bank(req_bank_id) or not res_status or rv_res_bank_tx_sts != 'ACSC' or req_bank_prtry_id != rv_req_bank_prtry_id or req_bank_id != rv_req_bank_id or req_bank_client_id != rv_req_bank_acct_id:
 		status_res_xml, doc_name = create_status_res_xml(str(our_biz_msg_idr_serial), header_from, header_to, req_bank_id, req_bank_biz_msg_idr, req_bank_msg_def_idr, 
 		req_bank_cre_dt, res_bank_biz_msg_idr, res_bank_msg_def_idr, res_bank_cre_dt, req_bank_msg_id, req_bank_cre_dt_tm, req_bank_accptnc_dt_tm,
 		res_orgnl_msg_id, res_orgnl_msg_nm_id, res_orgnl_cre_dt_tm, req_orgnl_tx_id, req_accptnc_dt_tm, "TNFN", "false", req_intr_bk_sttl_amt, req_intr_bk_sttl_amt_ccy,

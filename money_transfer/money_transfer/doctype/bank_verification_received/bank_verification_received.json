@@ -18,7 +18,8 @@
   "res_bank_rpt_vrfctn",
   "res_bank_rpt_prtry",
   "customer_error",
-  "error_flg"
+  "error_flg",
+  "creation_date_time"
  ],
  "fields": [
   {
@@ -99,9 +100,16 @@
    "fieldname": "error_flg",
    "fieldtype": "Check",
    "label": "Error Flag"
+  },
+  {
+   "default": "Now",
+   "fieldname": "creation_date_time",
+   "fieldtype": "Datetime",
+   "hidden": 1,
+   "label": "Creation Date Time"
   }
  ],
- "modified": "2021-08-16 13:40:44.960797",
+ "modified": "2021-09-08 05:50:21.419361",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Verification Received",

@@ -1,3 +1,4 @@
+from datetime import datetime
 import frappe
 from frappe.exceptions import RetryBackgroundJobError
 import shutil
@@ -28,7 +29,8 @@ def save_verification_req_db(client_no, bank_header, req_bank_id, bank_biz_msg_i
 		"res_bank_rpt_vrfctn": reason_true_false,
 		"res_bank_rpt_prtry": reason_msg,
 		"customer_error": customer_error,
-		"error_flg": error_flg
+		"error_flg": error_flg,
+		"creation_date_time": datetime.now()
 	})
 	vrfctn_doc.insert(ignore_permissions=True)
 	frappe.db.commit()
@@ -83,14 +85,14 @@ def check_duplicate_payment(req_bank_tx_id):
 	return 1 if tx_id else 0
 
 def check_verification(req_bank_tx_id):
-	res = frappe.db.get_value("Bank Verification Received", {"req_bank_vrfctn_id": req_bank_tx_id}, ["req_bank_id", "req_bank_acct_id", "req_bank_prtry_id", "req_bank_cre_dt", "res_bank_rpt_vrfctn", "res_bank_rpt_prtry"])
+	res = frappe.db.get_value("Bank Verification Received", {"req_bank_vrfctn_id": req_bank_tx_id}, ["req_bank_id", "req_bank_acct_id", "req_bank_prtry_id", "req_bank_cre_dt", "res_bank_rpt_vrfctn", "res_bank_rpt_prtry", "creation_date_time"])
 	result = 1 if res else 0
 	if result == 1:
 		(req_bank_id, req_bank_acct_id, req_bank_prtry_id, req_bank_cre_dt, res_bank_rpt_vrfctn, 
-		res_bank_rpt_prtry) = res
+		res_bank_rpt_prtry, creation) = res
 	else:
-		req_bank_id, req_bank_acct_id, req_bank_prtry_id, req_bank_cre_dt, res_bank_rpt_vrfctn, res_bank_rpt_prtry = "", "", "", "", "", ""
-	return result, req_bank_id, req_bank_acct_id, req_bank_prtry_id, req_bank_cre_dt, res_bank_rpt_vrfctn, res_bank_rpt_prtry
+		req_bank_id, req_bank_acct_id, req_bank_prtry_id, req_bank_cre_dt, res_bank_rpt_vrfctn, res_bank_rpt_prtry, creation = "", "", "", "", "", "", ""
+	return result, req_bank_id, req_bank_acct_id, req_bank_prtry_id, req_bank_cre_dt, res_bank_rpt_vrfctn, res_bank_rpt_prtry, creation
 
 def save_payment_req_db(req_bank_id, req_bank_biz_msg_idr, req_bank_msg_def_idr, req_bank_cre_dt, req_bank_cre_dt_tm, req_bank_accptnc_dt_tm, req_bank_sttlm_mtd, req_bank_lcl_instrm, 
 	req_bank_tx_id, req_bank_intr_bk_sttlm_amt, req_bank_intr_bk_sttlm_amt_ccy,  req_bank_chrg_br, req_bank_dbtr_name, req_bank_pstl_adr, req_bank_dbtr_ctct_dtls,  req_bank_acct_id, req_bank_prtry_id,  req_bank_dbtr_acct_issr,

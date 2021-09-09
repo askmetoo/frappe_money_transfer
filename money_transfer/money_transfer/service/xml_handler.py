@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from datetime import datetime
 from money_transfer.money_transfer.service.db import check_duplicate_payment, check_verification, save_status_req_db, save_verification_req_db, save_payment_req_db
-from money_transfer.money_transfer.utils import console_print
+from money_transfer.money_transfer.utils import console_print, validate_expiration
 from werkzeug.wrappers import Response
 import money_transfer.money_transfer.service.const as const
 def read_xml_verification(xml_string):
@@ -140,21 +140,24 @@ def create_payment_res_xml(header_from, header_to, req_bank_biz_msg_idr, req_ban
             if req_bank_acct_id == "223547860":
                 tx_sts = "TNFN"
             else:
-                result, bic, client_no, prtry, dte, ver_status, ver_mess = check_verification(req_bank_tx_id)
+                result, bic, client_no, prtry, dte, ver_status, ver_mess, creation = check_verification(req_bank_tx_id)
                 if result == 0:
                     tx_sts = "TNFN"
                 else:
-                    if ver_status == "false":
+                    if validate_expiration(creation, 15):
                         tx_sts = "MISS"
                     else:
-                        if client_no != req_bank_acct_id:
+                        if ver_status == "false":
                             tx_sts = "MISS"
                         else:
-                            if prtry != "ACCT":
+                            if client_no != req_bank_acct_id:
                                 tx_sts = "MISS"
                             else:
-                                if bic != req_bank_id:
+                                if prtry != "ACCT":
                                     tx_sts = "MISS"
+                                else:
+                                    if bic != req_bank_id:
+                                        tx_sts = "MISS"
 
     doc_name = save_payment_req_db(req_bank_id, req_bank_biz_msg_idr, req_bank_msg_def_idr, req_bank_cre_dt, req_bank_cre_dt_tm, req_bank_accptnc_dt_tm, req_bank_sttlm_mtd, req_bank_lcl_instrm, 
 	req_bank_tx_id, req_bank_intr_bk_sttlm_amt, req_bank_intr_bk_sttlm_amt_ccy,  req_bank_chrg_br, req_bank_dbtr_name, req_bank_pstl_adr, req_bank_dbtr_ctct_dtls,  req_bank_acct_id, req_bank_prtry_id,  req_bank_dbtr_acct_issr,

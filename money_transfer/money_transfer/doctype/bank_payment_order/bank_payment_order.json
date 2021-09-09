@@ -83,10 +83,9 @@
   },
   {
    "fieldname": "client_no",
-   "fieldtype": "Int",
+   "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Client No",
-   "length": 7
+   "label": "Client No"
   },
   {
    "fieldname": "amount",
@@ -138,7 +137,6 @@
    "fieldname": "transaction_state_sequence",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Transaction State Sequence",
    "read_only": 1
   },
@@ -155,6 +153,8 @@
   {
    "fieldname": "receiver_bank",
    "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Receiver Bank",
    "options": "Bank Company"
   },
@@ -203,6 +203,7 @@
    "default": "_",
    "fieldname": "date",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Date",
    "read_only": 1
   },
@@ -210,6 +211,7 @@
    "default": "_",
    "fieldname": "time",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Time",
    "read_only": 1
   },
@@ -285,6 +287,8 @@
    "default": "_",
    "fieldname": "fp_verification_id",
    "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "FP Verification ID",
    "read_only": 1
   },
@@ -340,7 +344,7 @@
    "label": "Payment Flag"
   }
  ],
- "modified": "2021-08-16 12:15:50.779316",
+ "modified": "2021-09-09 09:46:06.427147",
  "modified_by": "Administrator",
  "module": "Money Transfer",
  "name": "Bank Payment Order",

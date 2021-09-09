@@ -1,6 +1,6 @@
 import os
 from frappe.utils import get_site_name
-
+import datetime
 
 def get_total_amount(amount=0, rcv_fee=0, swift_fee=0, snd_fee=0):
 	total_amount = float(amount) + float(rcv_fee) + float(swift_fee) + float(snd_fee)
@@ -38,3 +38,9 @@ def num2str(num):
 
 def float2str(num):
 	return "{0:.2f}".format(float(num))
+
+def validate_expiration(creation_date: datetime.datetime, expiration_seconds: float):
+  now = datetime.datetime.now()
+  delta = now - creation_date
+  expired = delta.total_seconds() > expiration_seconds
+  return expired
