@@ -1,0 +1,25 @@
+{
+ "add_total_row": 1,
+ "creation": "2021-09-26 08:42:56.988185",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "idx": 0,
+ "is_standard": "Yes",
+ "letter_head": "Alwafa University Letter Head",
+ "modified": "2021-09-26 08:42:56.988185",
+ "modified_by": "Administrator",
+ "module": "Money Transfer",
+ "name": "Reconciliation",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Bank Payment Order",
+ "report_name": "Reconciliation",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ]
+}

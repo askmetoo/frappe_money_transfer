@@ -13,13 +13,7 @@ def get_data():
 					"name": "Bank Payment Order",
 					"label": _("Payment Order"),
 				},	
-				{
-					"type": "report",
-					"name": "Settlement Report",
-					"is_query_report": True,
-					"doctype": "Bank Payment Order",
-					"label": _("Settlement Report"),
-				},	
+				
 			]
 		},
         {
@@ -108,6 +102,54 @@ def get_data():
 					"name": "Bank Status Received",
 					"label": _("Received Status Requests"),
 				}
+			]
+		},
+		{
+			"label": _("Reports"),
+			"icon": "fa fa-wrench",
+			"items":[
+				{
+					"type": "report",
+					"name": "Settlement Report",
+					"is_query_report": True,
+					"doctype": "Bank Payment Order",
+					"label": _("Settlement Report"),
+				},	
+				{
+					"type": "report",
+					"name": "Daily Settlement Report",
+					"is_query_report": True,
+					"doctype": "Bank Payment Order",
+					"label": _("Daily Settlement Report"),
+				},	
+				{
+					"type": "report",
+					"name": "Switching Fees",
+					"is_query_report": True,
+					"doctype": "Bank Payment Order",
+					"label": _("Switching Fees"),
+				},	
+				{
+					"type": "report",
+					"name": "Interchange Fees",
+					"is_query_report": True,
+					"doctype": "Bank Payment Order",
+					"label": _("Interchange Fees"),
+				},	
+				{
+					"type": "report",
+					"name": "Reconciliation",
+					"is_query_report": True,
+					"doctype": "Bank Payment Order",
+					"label": _("Reconciliation"),
+				},	
+				{
+					"type": "report",
+					"name": "Transaction By Member",
+					"is_query_report": True,
+					"doctype": "Bank Payment Order",
+					"label": _("Transaction By Member"),
+				},	
 			]
 		}
 	]

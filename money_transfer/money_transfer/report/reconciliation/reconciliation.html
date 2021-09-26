@@ -1,0 +1,171 @@
+<style>
+    *{
+        font-size: .9em !important;
+    }
+    .header{
+        width: 100%;
+        margin: 10px auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid;
+        padding-bottom: 10px;
+    }
+    .logo{
+        margin-left: 10px;
+    }
+    .t-center{
+        text-align: center;
+    }
+    .f-12{
+        font-size: 1.2em;
+    }
+    .f-bold{
+        font-weight: bold;
+    }
+    .r-container{
+        padding: 10px 20px;
+    }
+    .main-table{
+        margin: 10px auto;
+    }
+    th{
+        text-align: center;
+    }
+    table{
+        width: 100%;
+    }
+    .w-50{
+        width: 50%;
+    }
+    .w-33{
+        width: 33%;
+    }
+    th, td{
+        border: 1px solid;
+    }
+    .d-flex{
+        display: flex;
+        justify-content: space-between;
+    }
+    .mr-20{
+        margin-right: 20px;
+    }
+    .mt-10{
+        margin-top: 10px;
+    }
+</style>
+<div class="r-container">
+<div class="header">
+    <div class="logo">
+        <img src="/files/logo.png" />
+    </div>
+    <div class="t-center f-bold f-12">
+        WeNet Financial Services Company YFSC
+    </div>
+    <div class="date f-12">
+        {{ frappe.datetime.now_datetime() }}
+    </div>
+    
+</div>
+
+<div class="main">
+    <div class="report-info f-12">
+        <div class="d-flex">
+            <div class="f-bold">Reconciliation</div>
+            <div class="d-flex">
+                <div class="mr-20">
+                    From: {{ filters.from }}
+                </div>
+                <div>
+                    To: {{ filters.to }}
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-10">
+            <div>Participant: YIB</div>
+            <div>BIC: YIB-B</div>
+            <div>Currency: {{ frappe.currency_code }}</div>
+        </div>
+    </div>
+    <div class="main-table">
+        <table>
+            
+            <thead>
+                <tr><td colspan="11">Transactions Sent</td></tr>
+                <tr>
+                    <th>No</th>
+                    <th>Original ID</th>
+                    <th>Time</th>
+                    <th>Destination</th>
+                    <th>Debtor Account</th>
+                    <th>Debtor Address</th>
+                    <th>Creditor Account</th>
+                    <th>Operation Amount</th>
+                    <th>Interchange Amount</th>
+                    <th>Settlement Amount</th>
+                    <th>Service Fee</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for(var i=0, l=data.length; i<l; i++) { %}
+                {% if(data[i].bictype == 'Sending'){ %}
+                <tr>
+                <td>{%= i + 1 %}</td>
+                <td>{{ data[i].orgnl_id }}</td>
+                <td>{{ data[i].trxdate }}</td>
+                <td>{{ data[i].dest }}</td>
+                <td>{{ data[i].debtor_act }}</td>
+                <td>{{ data[i].debtor_adrs }}</td>
+                <td>{{ data[i].creditor_act }}</td>
+                <td>{{ Number(data[i].op_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].interchange_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].setl_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].service_fee).toFixed(2) }} {{ frappe.currency_code }}</td>
+                </tr>
+                {% } %}
+                {% } %}
+            </tbody>
+        </table>
+    </div>
+    <div class="main-table">
+        <table>
+            <thead>
+                <tr><td colspan="11">Transactions Received</td></tr>
+                <tr>
+                    <th>No</th>
+                    <th>Original ID</th>
+                    <th>Time</th>
+                    <th>Source</th>
+                    <th>Debtor Account</th>
+                    <th>Debtor Address</th>
+                    <th>Creditor Account</th>
+                    <th>Operation Amount</th>
+                    <th>Interchange Amount</th>
+                    <th>Settlement Amount</th>
+                    <th>Service Fee</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for(var i=0, l=data.length; i<l; i++) { %}
+                {% if(data[i].bictype == 'Receiving'){ %}
+                <tr>
+                <td>{%= i + 1 %}</td>
+                <td>{{ data[i].orgnl_id }}</td>
+                <td>{{ data[i].trxdate }}</td>
+                <td>{{ data[i].src }}</td>
+                <td>{{ data[i].debtor_act }}</td>
+                <td>{{ data[i].debtor_adrs }}</td>
+                <td>{{ data[i].creditor_act }}</td>
+                <td>{{ Number(data[i].op_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].interchange_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].setl_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].service_fee).toFixed(2) }} {{ frappe.currency_code }}</td>
+                </tr>
+                {% } %}
+                {% } %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>

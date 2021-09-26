@@ -1,0 +1,124 @@
+<style>
+    .header{
+        width: 100%;
+        margin: 10px auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid;
+        padding-bottom: 10px;
+    }
+    .logo{
+        margin-left: 10px;
+    }
+    .t-center{
+        text-align: center;
+    }
+    .f-12{
+        font-size: 1.2em;
+    }
+    .f-bold{
+        font-weight: bold;
+    }
+    .r-container{
+        padding: 10px 20px;
+    }
+    .main-table{
+        margin: 10px auto;
+    }
+    th{
+        text-align: center;
+    }
+    table{
+        width: 100%;
+    }
+    .w-50{
+        width: 50%;
+    }
+    .w-33{
+        width: 33%;
+    }
+    th, td{
+        border: 1px solid;
+    }
+    .d-flex{
+        display: flex;
+        justify-content: space-between;
+    }
+    .mr-20{
+        margin-right: 20px;
+    }
+    .mt-10{
+        margin-top: 10px;
+    }
+</style>
+<div class="r-container">
+<div class="header">
+    <div class="logo">
+        <img src="/files/logo.png" />
+    </div>
+    <div class="t-center f-bold f-12">
+        WeNet Financial Services Company
+    </div>
+    <div class="date f-12">
+        {{ frappe.datetime.now_datetime() }}
+    </div>
+    
+</div>
+
+<div class="main">
+    <div class="report-info f-12">
+        <div class="d-flex">
+            <div class="f-bold">Switching Fees</div>
+            <div class="d-flex">
+                <div class="mr-20">
+                    From: {{ filters.from }}
+                </div>
+                <div>
+                    To: {{ filters.to }}
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-10">
+            <div>Participant: YIB</div>
+            <div>BIC: YIB-B</div>
+            <div>Currency: {{ frappe.currency_code }}</div>
+        </div>
+    </div>
+    <div class="main-table">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Transaction ID</th>
+                    <th colspan="2">Fees On The Amount Transferred</th>
+                    <th colspan="2">Fees On The Amount Received</th>
+                    <th rowspan="2">Total</th>
+                </tr>
+                <tr>
+                    <th>Amount</th>
+                    <th>Switch Fees</th>
+                    <th>Amount</th>
+                    <th>Switch Fees</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for(var i=0, l=data.length; i<l; i++) { %}
+                <tr>
+                    {% if (data[i].transaction_id) { %}
+                        <td>{{ data[i].transaction_id }}</td>
+                    {% }else { %}
+                        <td>Total</td>
+                    {% } %}
+                
+                <td>{{ Number(data[i].trans_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].trans_fees).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].rcv_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].rcv_fees).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].total).toFixed(2) }} {{ frappe.currency_code }}</td>
+                </tr>
+                {% } %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
