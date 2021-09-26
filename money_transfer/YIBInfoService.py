@@ -160,7 +160,7 @@ def push_status(req_bank_tx_id, doc_name):
 		res_xml = requests.post(url= push_status_url, data=status_req_xml.encode('utf-8'), headers=headers, timeout=15).text
 		save_xml_prtfy(res_xml_path, res_xml)
 		save_payment_file_db(site_name, res_file_name, res_xml_path, private_path, res_path, doc_name)
-		validate_push_status_res(res_xml, doc_name, req_bank_acct_id)
+		validate_push_status_res(res_xml, doc_name, req_bank_acct_id, req_bank_tx_id)
 	except requests.Timeout:
 		try:
 			update_psh_status(doc_name, '99', 'pushstatus time out')
@@ -172,11 +172,12 @@ def push_status(req_bank_tx_id, doc_name):
 		except:
 			update_psh_status(doc_name, '99', '')
 
-def validate_push_status_res(status_res_xml, doc_name, rv_req_bank_acct_id):
+def validate_push_status_res(status_res_xml, doc_name, rv_req_bank_acct_id, req_bank_tx_id):
 	(header_from, header_to, req_bank_biz_msg_idr, req_bank_msg_def_idr, req_bank_cre_dt, res_bank_biz_msg_idr, res_bank_msg_def_idr, res_bank_cre_dt,
             req_bank_cre_dt_tm, req_bank_msg_id, req_bank_id, res_orgnl_msg_id, res_orgnl_msg_nm_id, res_orgnl_cre_dt_tm, req_orgnl_tx_id, req_tx_sts, 
             req_intr_bk_sttl_amt, req_nm, req_adr_line, req_bank_client_id, req_bank_prtry_id) = read_push_status_xml(status_res_xml)
-	if rv_req_bank_acct_id == req_bank_client_id:
+	print(req_bank_tx_id ,req_orgnl_tx_id)
+	if rv_req_bank_acct_id == req_bank_client_id and req_bank_tx_id == req_orgnl_tx_id:
 		if req_tx_sts == 'ACSC':
 			customer_no, customer_error, error_flg = req_bank_client_id, '', 0
 			snd_fee, swf_fee, rcv_fee = "0", get_transfer_fee(req_orgnl_tx_id, doc_name),"0"
@@ -191,7 +192,7 @@ def validate_push_status_res(status_res_xml, doc_name, rv_req_bank_acct_id):
 			update_psh_status(doc_name, '0', req_tx_sts)
 	else:
 		update_psh_status(doc_name, '0', req_tx_sts)
-		
+
 def get_transfer_fee(req_orgnl_tx_id, doc_name):
 	return "0"
 	ret_fees, our_zone_code = "0", "00"
