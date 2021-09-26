@@ -190,15 +190,16 @@ def update_status_flg(doc_name, flg):
 	frappe.db.commit()
 
 def get_payment_status_data(doc_name):
-	res = frappe.db.get_value("Bank Payment Received", doc_name, ["res_bank_id", "res_bank_biz_msg_idr", "req_bank_biz_msg_idr"])
+	res = frappe.db.get_value("Bank Payment Received", doc_name, ["res_bank_id", "res_bank_biz_msg_idr", "req_bank_biz_msg_idr", "req_bank_acct_id"])
 	if res:
-		res_bank_id, res_bank_biz_msg, req_bank_biz_msg = res
+		res_bank_id, res_bank_biz_msg, req_bank_biz_msg, req_bank_acct_id = res
 	else:
-		res_bank_id, res_bank_biz_msg, req_bank_biz_msg = '', '', ''
+		res_bank_id, res_bank_biz_msg, req_bank_biz_msg, req_bank_acct_id = '', '', '', ''
 	res_bank_id = res_bank_id if res_bank_id else ""
 	res_bank_biz_msg = res_bank_biz_msg if res_bank_biz_msg else ""
 	req_bank_biz_msg = req_bank_biz_msg if req_bank_biz_msg else ""
-	return res_bank_id, res_bank_biz_msg, req_bank_biz_msg
+	req_bank_acct_id = req_bank_acct_id if req_bank_acct_id else ""
+	return res_bank_id, res_bank_biz_msg, req_bank_biz_msg, req_bank_acct_id
 
 def get_fees_data(doc_name):
 	res = frappe.db.get_value("Bank Payment Received", doc_name, ["res_bank_id", "req_bank_id", "req_bank_bldg_nb", "req_bank_acct_id", "req_bank_intr_bk_sttlm_amt"])

@@ -148,7 +148,7 @@ def push_status_loop(req_bank_tx_id, doc_name):
 			break
 
 def push_status(req_bank_tx_id, doc_name):
-	res_bank_id, res_bank_biz_msg, req_bank_biz_msg = get_payment_status_data(doc_name)
+	res_bank_id, res_bank_biz_msg, req_bank_biz_msg, req_bank_acct_id = get_payment_status_data(doc_name)
 	status_req_xml = create_push_status_xml_doc(req_bank_biz_msg, res_bank_id, res_bank_biz_msg, req_bank_tx_id)
 	req_file_name, res_file_name, req_xml_path, res_xml_path, site_name, private_path,  req_path, res_path = get_service_files_names('PushStatus', 'StatusFileSerIn')
 	save_xml(req_xml_path, status_req_xml)
@@ -160,7 +160,7 @@ def push_status(req_bank_tx_id, doc_name):
 		res_xml = requests.post(url= push_status_url, data=status_req_xml.encode('utf-8'), headers=headers, timeout=15).text
 		save_xml_prtfy(res_xml_path, res_xml)
 		save_payment_file_db(site_name, res_file_name, res_xml_path, private_path, res_path, doc_name)
-		validate_push_status_res(res_xml, doc_name)
+		validate_push_status_res(res_xml, doc_name, req_bank_acct_id)
 	except requests.Timeout:
 		try:
 			update_psh_status(doc_name, '99', 'pushstatus time out')
@@ -172,24 +172,26 @@ def push_status(req_bank_tx_id, doc_name):
 		except:
 			update_psh_status(doc_name, '99', '')
 
-def validate_push_status_res(status_res_xml, doc_name):
+def validate_push_status_res(status_res_xml, doc_name, rv_req_bank_acct_id):
 	(header_from, header_to, req_bank_biz_msg_idr, req_bank_msg_def_idr, req_bank_cre_dt, res_bank_biz_msg_idr, res_bank_msg_def_idr, res_bank_cre_dt,
             req_bank_cre_dt_tm, req_bank_msg_id, req_bank_id, res_orgnl_msg_id, res_orgnl_msg_nm_id, res_orgnl_cre_dt_tm, req_orgnl_tx_id, req_tx_sts, 
             req_intr_bk_sttl_amt, req_nm, req_adr_line, req_bank_client_id, req_bank_prtry_id) = read_push_status_xml(status_res_xml)
-	
-	if req_tx_sts == 'ACSC':
-		customer_no, customer_error, error_flg = req_bank_client_id, '', 0
-		snd_fee, swf_fee, rcv_fee = "0", get_transfer_fee(req_orgnl_tx_id, doc_name),"0"
+	if rv_req_bank_acct_id == req_bank_client_id:
+		if req_tx_sts == 'ACSC':
+			customer_no, customer_error, error_flg = req_bank_client_id, '', 0
+			snd_fee, swf_fee, rcv_fee = "0", get_transfer_fee(req_orgnl_tx_id, doc_name),"0"
 
-		customer_no, customer_error, error_flg = make_payment_for_customer(customer_no, req_intr_bk_sttl_amt, req_orgnl_tx_id, req_bank_prtry_id, req_bank_id, snd_fee, swf_fee, rcv_fee)
-		if int(error_flg) == 1:
-			update_psh_status(doc_name, '0', req_tx_sts, customer_error)
+			customer_no, customer_error, error_flg = make_payment_for_customer(customer_no, req_intr_bk_sttl_amt, req_orgnl_tx_id, req_bank_prtry_id, req_bank_id, snd_fee, swf_fee, rcv_fee)
+			if int(error_flg) == 1:
+				update_psh_status(doc_name, '0', req_tx_sts, customer_error)
+			else:
+				update_psh_status(doc_name, '1', req_tx_sts)
+
 		else:
-			update_psh_status(doc_name, '1', req_tx_sts)
-
+			update_psh_status(doc_name, '0', req_tx_sts)
 	else:
 		update_psh_status(doc_name, '0', req_tx_sts)
-
+		
 def get_transfer_fee(req_orgnl_tx_id, doc_name):
 	return "0"
 	ret_fees, our_zone_code = "0", "00"
@@ -236,7 +238,7 @@ def validate_status_request(status_xml):
 	# print(res_status, payment_doc_name, rv_req_bank_id, rv_req_bank_acct_id, rv_req_bank_prtry_id, rv_req_bank_intr_bk_sttlm_amt, rv_req_bank_intr_bk_sttlm_amt_ccy,
 	# rv_res_bank_tx_sts, rv_timer_exceed_flg, rv_status_recieved_flg, rv_req_bank_debit_id, rv_req_bank_debit_prt)
 	#or req_bank_prtry_id != rv_req_bank_prtry_id or req_bank_id != rv_req_bank_id or req_bank_client_id != rv_req_bank_acct_id
-	if not validate_req_bank(req_bank_id) or not res_status or rv_res_bank_tx_sts != 'ACSC' or req_bank_prtry_id != rv_req_bank_prtry_id or req_bank_id != rv_req_bank_id or req_bank_client_id != rv_req_bank_acct_id:
+	if not validate_req_bank(req_bank_id) or not res_status or rv_res_bank_tx_sts != 'ACSC' or req_bank_prtry_id != rv_req_bank_prtry_id or req_bank_id != rv_req_bank_id or req_bank_client_id != rv_req_bank_acct_id or rv_req_bank_intr_bk_sttlm_amt_ccy != req_intr_bk_sttl_amt_ccy or rv_req_bank_intr_bk_sttlm_amt != req_intr_bk_sttl_amt:
 		status_res_xml, doc_name = create_status_res_xml(str(our_biz_msg_idr_serial), header_from, header_to, req_bank_id, req_bank_biz_msg_idr, req_bank_msg_def_idr, 
 		req_bank_cre_dt, res_bank_biz_msg_idr, res_bank_msg_def_idr, res_bank_cre_dt, req_bank_msg_id, req_bank_cre_dt_tm, req_bank_accptnc_dt_tm,
 		res_orgnl_msg_id, res_orgnl_msg_nm_id, res_orgnl_cre_dt_tm, req_orgnl_tx_id, req_accptnc_dt_tm, "TNFN", "false", req_intr_bk_sttl_amt, req_intr_bk_sttl_amt_ccy,
