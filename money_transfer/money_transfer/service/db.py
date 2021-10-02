@@ -206,7 +206,7 @@ def get_fees_data(doc_name):
 	try:
 		res_bank_id, req_bank_id, req_bank_bldg, req_bank_acct, req_bank_amt = res
 		currency = req_bank_acct[13:15]
-		currency_code = frappe.db.get_value("Bank Currency", {"system_code": currency},["currency_code"] )
+		currency_code, fees_url, fetch_fees = frappe.db.get_value("Bank Currency", {"system_code": currency},["currency_code", "system_url", "fetch_fees"] )
 		
 		bank_name, fees_password = frappe.db.get_value("Bank Company", {"system_code": req_bank_id}, ["name","fees_password"])
 		
@@ -214,9 +214,9 @@ def get_fees_data(doc_name):
 		branch_region_id = frappe.db.get_value("Bank Branch", {"bank":bank_name, "branch_code":branch_code}, ["branch_region"])
 		our_zone_code = frappe.db.get_value("Bank Region", branch_region_id, ["unique_code"])
 		
-		return res_bank_id, req_bank_id, req_bank_bldg, req_bank_acct, req_bank_amt, currency_code, fees_password, our_zone_code
+		return res_bank_id, req_bank_id, req_bank_bldg, req_bank_acct, req_bank_amt, currency_code, fees_password, our_zone_code, fees_url, fetch_fees
 	except:
-		return "", "", "", "", "", "", "", ""
+		return "", "", "", "", "", "", "", "", "", 0
 
 def update_payment_fees_data(doc_name, retail, switch, interchange, transaction_id, result, error_desc):
 	# payment_doc = frappe.get_doc(doctype="Bank Payment Received", filters={"req_bank_tx_id": req_orgnl_tx_id})

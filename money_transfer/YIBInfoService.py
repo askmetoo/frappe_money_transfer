@@ -176,7 +176,6 @@ def validate_push_status_res(status_res_xml, doc_name, rv_req_bank_acct_id, req_
 	(header_from, header_to, req_bank_biz_msg_idr, req_bank_msg_def_idr, req_bank_cre_dt, res_bank_biz_msg_idr, res_bank_msg_def_idr, res_bank_cre_dt,
             req_bank_cre_dt_tm, req_bank_msg_id, req_bank_id, res_orgnl_msg_id, res_orgnl_msg_nm_id, res_orgnl_cre_dt_tm, req_orgnl_tx_id, req_tx_sts, 
             req_intr_bk_sttl_amt, req_nm, req_adr_line, req_bank_client_id, req_bank_prtry_id) = read_push_status_xml(status_res_xml)
-	print(req_bank_tx_id ,req_orgnl_tx_id)
 	if rv_req_bank_acct_id == req_bank_client_id and req_bank_tx_id == req_orgnl_tx_id:
 		if req_tx_sts == 'ACSC':
 			customer_no, customer_error, error_flg = req_bank_client_id, '', 0
@@ -194,15 +193,16 @@ def validate_push_status_res(status_res_xml, doc_name, rv_req_bank_acct_id, req_
 		update_psh_status(doc_name, '0', req_tx_sts)
 
 def get_transfer_fee(req_orgnl_tx_id, doc_name):
-	return "0"
 	ret_fees, our_zone_code = "0", "00"
 	#doc_name = frappe.db.get_value("Bank Payment Received", {"req_bank_tx_id":req_orgnl_tx_id}, ["name"])
 	req_file_name, res_file_name, req_xml_path, res_xml_path, site_name, private_path,  req_path, res_path = get_service_files_names('Fees', 'StatusFileSerIn')
-	res_bank_id, req_bank_id, req_bank_bldg, req_bank_acct, req_bank_amt, currency_code, fees_password, our_zone_code = get_fees_data(doc_name)
+	res_bank_id, req_bank_id, req_bank_bldg, req_bank_acct, req_bank_amt, currency_code, fees_password, our_zone_code, fees_url, fetch_fees = get_fees_data(doc_name)
+	if fetch_fees == 0:
+		return "0"
 	fees_xml_req = create_fees_xml_doc(req_xml_path, req_bank_id, fees_password, str(req_bank_amt).strip(), res_bank_id, req_bank_bldg, our_zone_code, currency_code, req_orgnl_tx_id)
 	save_payment_file_db(site_name, req_file_name, req_xml_path, private_path, req_path, doc_name)
 	
-	req_fees_url = frappe.db.get_value("Bank Service Control", "260", ["rec_text"])
+	req_fees_url = fees_url#frappe.db.get_value("Bank Service Control", "260", ["rec_text"])
 	
 	try:
 		headers = {'Content-Type': 'application/xml'}
@@ -225,7 +225,7 @@ def get_transfer_fee(req_orgnl_tx_id, doc_name):
 		except:
 			update_payment_fees_data(doc_name, "0", "0", "0", "", "error", '')
 
-	return ret_fees
+	return "0"
 
 def validate_status_request(status_xml):
 	(header_from, header_to, req_bank_biz_msg_idr, req_bank_msg_def_idr, req_bank_cre_dt, res_bank_biz_msg_idr, res_bank_msg_def_idr, res_bank_cre_dt,

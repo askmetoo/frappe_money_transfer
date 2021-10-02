@@ -18,24 +18,44 @@ def get_columns():
 		"label": "Participant",
 	},
 		{
-		"fieldname": "trans_rcv",
+		"fieldname": "trans_amount",
 		"fieldtype": "Data",
-		"label": "Transferred YIB Received",
+		"label": "Transferred Amount",
 	},
 		{
-		"fieldname": "trans_paid",
+		"fieldname": "trans_rcv",
 		"fieldtype": "Data",
-		"label": "Transferred YIB Paid",
+		"label": "Receiver Bank Fee",
+	},
+		{
+		"fieldname": "trans_swft",
+		"fieldtype": "Data",
+		"label": "Swift Fee",
+	},
+		{
+		"fieldname": "trans_snd",
+		"fieldtype": "Data",
+		"label": "Sender Bank Fee",
+	},
+		{
+		"fieldname": "rcv_amount",
+		"fieldtype": "Data",
+		"label": "Received Amount",
 	},
 		{
 		"fieldname": "rcv_rcv",
 		"fieldtype": "Data",
-		"label": "Received YIB Received",
+		"label": "Receiver Bank Fee",
 	},
 		{
-		"fieldname": "rcv_paid",
+		"fieldname": "rcv_swft",
 		"fieldtype": "Data",
-		"label": "Received YIB Paid",
+		"label": "Swift Fee",
+	},
+		{
+		"fieldname": "rcv_snd",
+		"fieldtype": "Data",
+		"label": "Sender Bank Fee",
 	},
 		{
 		"fieldname": "net_balance",
@@ -48,16 +68,19 @@ def get_data(filters=None):
 	from_date, to_date, currency = filters.get('from'), filters.get('to'), filters.get('currency')
 	currency_code = frappe.db.get_value("Bank Currency", currency, ["currency_code"])
 	return frappe.db.sql("""
-	SELECT bank as participant, SUM(trans_rcv) as trans_rcv, SUM(trans_paid) as trans_paid, 
-	SUM(rcv_rcv) as rcv_rcv, SUM(rcv_paid) as rcv_paid, 
-	(SUM(trans_rcv + rcv_rcv -  trans_paid - rcv_paid)) as net_balance FROM(
-		SELECT c.system_code as bank,  sum(bpo.sender_bank_fee) as trans_rcv, SUM(bpo.receiver_bank_fee) as trans_paid, 0 as rcv_rcv, 0 as rcv_paid
+	SELECT bank as participant, 
+	SUM(trans_amount) as trans_amount, SUM(trans_rcv) as trans_rcv, SUM(trans_swft) as trans_swft,SUM(trans_snd) as trans_snd, 
+	SUM(rcv_amount) as rcv_amount, SUM(rcv_rcv) as rcv_rcv, SUM(rcv_swft) as rcv_swft,SUM(rcv_snd) as rcv_snd, 
+	(SUM( trans_rcv + trans_swft + trans_snd  - rcv_rcv - rcv_swft - rcv_snd)) as net_balance FROM(
+		SELECT c.system_code as bank,  sum(bpo.amount) as trans_amount, sum(bpo.receiver_bank_fee) as trans_rcv, 
+		SUM(bpo.swift_fee) as trans_swft, SUM(bpo.sender_bank_fee) as trans_snd, 0 as rcv_amount, 0 as rcv_rcv, 0 as rcv_swft, 0 as rcv_snd
 			FROM `tabBank Payment Order` as bpo
 			INNER JOIN `tabBank Company` as c ON receiver_bank=c.name
 			WHERE transaction_state_sequence='Post' AND (bpo.creation BETWEEN %s AND %s ) AND bpo.currency=%s 
 			GROUP BY receiver_bank
 	UNION
-	SELECT req_bank_id as bank,  0 as trans_rcv, 0 as trans_paid, 0 as rcv_rcv, 0 as rcv_paid
+	SELECT req_bank_id as bank,  0 as trans_amount, 0 as trans_rcv, 0 as trans_swft, 0 as trans_snd, 
+			SUM(bpr.req_bank_intr_bk_sttlm_amt) as rcv_amount , SUM(bpr.retail_fees) as rcv_rcv, SUM(bpr.switch_fees) as rcv_swft, SUM(bpr.interchange_fees) as rcv_snd
 			FROM `tabBank Payment Received` as bpr
 			WHERE (bpr.creation BETWEEN %s AND %s ) AND (status_recieved_flg=1 OR (psh_sts_rcv_flg=1 AND psh_sts_rcv_txt='ACSC')) AND bpr.req_bank_intr_bk_sttlm_amt_ccy=%s
 			GROUP BY req_bank_id

@@ -91,15 +91,19 @@
             <thead>
                 <tr>
                     <th rowspan="2">Participant</th>
-                    <th colspan="2">Fees For Total Amount Transferred</th>
-                    <th colspan="2">Fee For Total Amount Received</th>
+                    <th colspan="4">Fees For Total Amount Transferred</th>
+                    <th colspan="4">Fees For Total Amount Received</th>
                     <th rowspan="2">Net Balance Of Participants against YIB</th>
                 </tr>
                 <tr>
-                    <th>YIB Received</th>
-                    <th>YIB Paid</th>
-                    <th>YIB Received</th>
-                    <th>YIB Paid</th>
+                    <th>Amount</th>
+                    <th>Receiver Bank Fee</th>
+                    <th>Swift Fee</th>
+                    <th>Sender Bank Fee</th>
+                    <th>Amount</th>
+                    <th>Receiver Bank Fee</th>
+                    <th>Swift Fee</th>
+                    <th>Sender Bank Fee</th>
                 </tr>
             </thead>
             <tbody>
@@ -111,10 +115,14 @@
                         <td>Total:</td>
                     {% } %}
                 
+                <td>{{ Number(data[i].trans_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
                 <td>{{ Number(data[i].trans_rcv).toFixed(2) }} {{ frappe.currency_code }}</td>
-                <td>{{ Number(data[i].trans_paid).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].trans_swft).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].trans_snd).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].rcv_amount).toFixed(2) }} {{ frappe.currency_code }}</td>
                 <td>{{ Number(data[i].rcv_rcv).toFixed(2) }} {{ frappe.currency_code }}</td>
-                <td>{{ Number(data[i].rcv_paid).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].rcv_swft).toFixed(2) }} {{ frappe.currency_code }}</td>
+                <td>{{ Number(data[i].rcv_snd).toFixed(2) }} {{ frappe.currency_code }}</td>
                 {% if (Number(data[i].net_balance) > 0) { %}
                     <td>{{ Number(data[i].net_balance).toFixed(2) }} {{ frappe.currency_code }} CR</td>
                 {% }else { %}
